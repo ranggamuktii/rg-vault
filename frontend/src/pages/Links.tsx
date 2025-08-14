@@ -71,9 +71,16 @@ const Links: React.FC = () => {
         toast.success('Link created successfully!');
       }
       closeModal();
-    } catch (error: any) {
-      const maybeMsg = error?.response?.data?.message;
-      toast.error(typeof maybeMsg === 'string' ? maybeMsg : 'Something went wrong!');
+    } catch (error: unknown) {
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const errObj = error as { response?: { data?: { message?: string } } };
+        const maybeMsg = errObj.response?.data?.message;
+        toast.error(typeof maybeMsg === 'string' ? maybeMsg : 'Something went wrong!');
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Something went wrong!');
+      }
     }
   };
 
@@ -82,8 +89,12 @@ const Links: React.FC = () => {
       try {
         await deleteLink(id);
         toast.success('Link deleted successfully!');
-      } catch {
-        toast.error('Failed to delete link');
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error('Failed to delete link');
+        }
       }
     }
   };
@@ -117,6 +128,7 @@ const Links: React.FC = () => {
           </div>
           <div className="w-full sm:w-48">
             <select
+              aria-label="select category"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
@@ -133,7 +145,7 @@ const Links: React.FC = () => {
 
         {/* Links Grid */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-12">
+          <div className="flex items-center justify-center py-12" role="status" aria-label="Loading links">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
         ) : (
@@ -142,6 +154,7 @@ const Links: React.FC = () => {
             <div
               role="button"
               tabIndex={0}
+              aria-label="Add new link"
               onClick={() => openModal()}
               onKeyDown={(e) => (e.key === 'Enter' ? openModal() : null)}
               className="
@@ -164,7 +177,7 @@ const Links: React.FC = () => {
                 className="
                   bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200
                   hover:shadow-md transition-all duration-300 ease-[cubic-bezier(.16,1,.3,1)]
-                  animate-fadeIn
+                  animate-fadeIn group
                 "
               >
                 <div className="flex items-start justify-between mb-4">
@@ -172,7 +185,7 @@ const Links: React.FC = () => {
                     {link.favicon_url && (
                       <img
                         src={link.favicon_url}
-                        alt=""
+                        alt={`${new URL(link.url).hostname} favicon`}
                         className="w-6 h-6 rounded flex-shrink-0"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
@@ -182,13 +195,13 @@ const Links: React.FC = () => {
                     <h3 className="text-lg font-medium text-gray-900 truncate">{link.title || 'Untitled'}</h3>
                   </div>
                   <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => openLink(link.url)} className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all" title="Open link">
+                    <button onClick={() => openLink(link.url)} aria-label="Open link" title="Open link" className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all">
                       <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                     </button>
-                    <button onClick={() => openModal(link)} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Edit link">
+                    <button onClick={() => openModal(link)} aria-label="Edit link" title="Edit link" className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
                       <PencilIcon className="h-4 w-4" />
                     </button>
-                    <button onClick={() => handleDelete(link.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete link">
+                    <button onClick={() => handleDelete(link.id)} aria-label="Delete link" title="Delete link" className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
                       <TrashIcon className="h-4 w-4" />
                     </button>
                   </div>
@@ -221,7 +234,7 @@ const Links: React.FC = () => {
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">No links yet</h3>
             <p className="text-gray-600 mb-6">Save your first bookmark to get started</p>
-            <button onClick={() => openModal()} className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-medium">
+            <button onClick={() => openModal()} aria-label="Add your first link" className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-medium">
               <PlusIcon className="h-5 w-5 mr-2" />
               Add your first link
             </button>
@@ -234,17 +247,27 @@ const Links: React.FC = () => {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 z-40 transition-opacity backdrop-blur-sm" onClick={closeModal} />
-            <div className="inline-block relative z-50 align-bottom bg-white rounded-2xl px-6 pt-6 pb-6 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="link-modal-title"
+              className="inline-block relative z-50 align-bottom bg-white rounded-2xl px-6 pt-6 pb-6 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+            >
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-6">
-                  <h3 className="text-xl font-medium text-gray-900 mb-6">{editingLink ? 'Edit Link' : 'Add New Link'}</h3>
+                  <h3 id="link-modal-title" className="text-xl font-medium text-gray-900 mb-6">
+                    {editingLink ? 'Edit Link' : 'Add New Link'}
+                  </h3>
                   <div className="space-y-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">URL *</label>
                       <input
                         {...register('url', {
                           required: 'URL is required',
-                          pattern: { value: /^https?:\/\/.+/, message: 'Please enter a valid URL starting with http:// or https://' },
+                          pattern: {
+                            value: /^https?:\/\/.+/,
+                            message: 'Please enter a valid URL starting with http:// or https://',
+                          },
                         })}
                         type="url"
                         className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"

@@ -140,6 +140,7 @@ const Notes: React.FC = () => {
             <input
               type="text"
               placeholder="Search notes..."
+              aria-label="Search notes"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl
@@ -151,7 +152,7 @@ const Notes: React.FC = () => {
           {/* Notes Grid */}
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" aria-label="Loading notes"></div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -159,6 +160,7 @@ const Notes: React.FC = () => {
               <div
                 role="button"
                 tabIndex={0}
+                aria-label="Add a new note"
                 onClick={() => openEditor()}
                 onKeyDown={(e) => (e.key === 'Enter' ? openEditor() : null)}
                 className={`
@@ -181,6 +183,7 @@ const Notes: React.FC = () => {
                   key={note.id}
                   role="button"
                   tabIndex={0}
+                  aria-label={`Open note titled ${note.title}`}
                   onClick={() => onCardClick(note)}
                   onKeyDown={(e) => (e.key === 'Enter' ? onCardClick(note) : null)}
                   className={`
@@ -190,12 +193,15 @@ const Notes: React.FC = () => {
                     cursor-pointer group focus:outline-none animate-fadeIn
                     ${panelOpen ? 'md:col-span-2 lg:col-span-3 p-6' : 'p-5'}
                   `}
-                  style={{ animationDelay: `${(idx + 1) * 60}ms` }} // stagger
+                  style={{ animationDelay: `${(idx + 1) * 60}ms` }}
                 >
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-lg font-medium text-gray-900 truncate flex-1 mr-3">{note.title}</h3>
                     <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
+                        type="button"
+                        title="Edit note"
+                        aria-label="Edit note"
                         onClick={(e) => {
                           e.stopPropagation();
                           openEditor(note);
@@ -205,6 +211,9 @@ const Notes: React.FC = () => {
                         <PencilIcon className="h-4 w-4" />
                       </button>
                       <button
+                        type="button"
+                        title="Delete note"
+                        aria-label="Delete note"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleDelete(note.id);
@@ -254,22 +263,28 @@ const Notes: React.FC = () => {
           `}
         >
           {isEditorOpen && (
-            <div className=" p-6 animate-fadeIn">
+            <div className="p-6 animate-fadeIn">
               <h3 className="text-xl font-medium text-gray-900 mb-6">{editingNote ? 'Edit Note' : 'Create New Note'}</h3>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                  <input {...register('title', { required: 'Title is required' })} className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" />
+                  <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                    Title
+                  </label>
+                  <input id="title" placeholder="Enter title" {...register('title', { required: 'Title is required' })} className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" />
                   {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
-                  <textarea {...register('content', { required: 'Content is required' })} rows={8} className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" />
+                  <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+                    Content
+                  </label>
+                  <textarea id="content" placeholder="Enter content" {...register('content', { required: 'Content is required' })} rows={8} className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" />
                   {errors.content && <p className="mt-2 text-sm text-red-600">{errors.content.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
-                  <input {...register('tags')} className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" />
+                  <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+                    Tags
+                  </label>
+                  <input id="tags" placeholder="Enter tags separated by commas" {...register('tags')} className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" />
                 </div>
                 <div className="flex justify-end gap-3">
                   <button type="button" onClick={closePanel} className="px-6 py-3 bg-gray-100 rounded-xl">
@@ -287,14 +302,14 @@ const Notes: React.FC = () => {
             <div className="p-6 animate-fadeIn">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex gap-2">
-                  <button onClick={goPrev} className="p-2 rounded-lg hover:bg-gray-50">
+                  <button type="button" onClick={goPrev} className="p-2 rounded-lg hover:bg-gray-50" title="Previous note" aria-label="Previous note">
                     <ChevronLeftIcon className="w-5 h-5" />
                   </button>
-                  <button onClick={goNext} className="p-2 rounded-lg hover:bg-gray-50">
+                  <button type="button" onClick={goNext} className="p-2 rounded-lg hover:bg-gray-50" title="Next note" aria-label="Next note">
                     <ChevronRightIcon className="w-5 h-5" />
                   </button>
                 </div>
-                <button onClick={closePanel} className="p-2 rounded-lg hover:bg-gray-50">
+                <button type="button" onClick={closePanel} className="p-2 rounded-lg hover:bg-gray-50" title="Close preview" aria-label="Close preview">
                   <XMarkIcon className="w-6 h-6" />
                 </button>
               </div>
@@ -319,10 +334,10 @@ const Notes: React.FC = () => {
               )}
               <article className="prose prose-sm max-w-none text-gray-800 whitespace-pre-wrap">{selectedNote.content}</article>
               <div className="flex gap-3 mt-8">
-                <button onClick={() => openEditor(selectedNote)} className="px-4 py-2 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition">
+                <button type="button" onClick={() => openEditor(selectedNote)} className="px-4 py-2 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition" title="Edit note" aria-label="Edit note">
                   <PencilIcon className="w-4 h-4 inline mr-1" /> Edit
                 </button>
-                <button onClick={() => handleDelete(selectedNote.id)} className="px-4 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition">
+                <button type="button" onClick={() => handleDelete(selectedNote.id)} className="px-4 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition" title="Delete note" aria-label="Delete note">
                   <TrashIcon className="w-4 h-4 inline mr-1" /> Delete
                 </button>
               </div>

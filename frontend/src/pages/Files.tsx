@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { toast } from 'react-hot-toast';
-import { PlusIcon, TrashIcon, ArrowDownTrayIcon, DocumentIcon, PhotoIcon, VideoCameraIcon, MusicalNoteIcon, ArchiveBoxIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TrashIcon, ArrowDownTrayIcon, DocumentIcon, PhotoIcon, VideoCameraIcon, MusicalNoteIcon, ArchiveBoxIcon } from '@heroicons/react/24/outline';
 import MainLayout from '../components/Layout/MainLayout';
 import { useFileStore } from '../store/fileStore';
 import type { FileItem } from '../types';
@@ -26,44 +26,24 @@ type PendingFile = {
   cancel?: () => void;
 };
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Files: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedType, setSelectedType] = useState('');
   const [uploadCategory, setUploadCategory] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [pendingFiles, setPendingFiles] = useState<PendingFile[]>([]);
 
-  const { files, isLoading, fetchFiles, uploadFile, deleteFile } = useFileStore();
-
-  const categories = Array.from(new Set(files.filter((file) => file.category).map((file) => file.category)));
-
-  const fileTypes = [
-    { value: '', label: 'All Types' },
-    { value: 'image', label: 'Images' },
-    { value: 'video', label: 'Videos' },
-    { value: 'audio', label: 'Audio' },
-    { value: 'application', label: 'Documents' },
-    { value: 'text', label: 'Text Files' },
-  ];
+  const { files, isLoading, fetchFiles, deleteFile } = useFileStore();
 
   useEffect(() => {
     fetchFiles();
   }, [fetchFiles]);
 
-  useEffect(() => {
-    const delayedSearch = setTimeout(() => {
-      fetchFiles(searchTerm, selectedCategory, selectedType);
-    }, 300);
-    return () => clearTimeout(delayedSearch);
-  }, [searchTerm, selectedCategory, selectedType, fetchFiles]);
-
   const handleFileSelect = () => {
     fileInputRef.current?.click();
   };
 
-  // --- Utility ---
   const compressImage = async (file: File) => {
     const options = {
       maxSizeMB: 1,
@@ -131,7 +111,6 @@ const Files: React.FC = () => {
     return chunks;
   };
 
-  // --- Handle file selection ---
   const handleFilesSelected = async (fileList: FileList) => {
     const filesArray = Array.from(fileList);
     const processedFiles = await Promise.all(
@@ -155,7 +134,6 @@ const Files: React.FC = () => {
     setPendingFiles((prev) => [...prev, ...processedFiles]);
   };
 
-  // --- Chunked upload with resume ---
   const uploadPendingFile = async (pf: PendingFile) => {
     try {
       pf.status = 'uploading';
@@ -166,7 +144,6 @@ const Files: React.FC = () => {
       const totalChunks = pf.chunks.length;
       let uploadedCount = 0;
 
-      // upload semua chunk
       for (const chunk of pf.chunks) {
         const formData = new FormData();
         formData.append('file', chunk.blob);
@@ -182,16 +159,13 @@ const Files: React.FC = () => {
         setPendingFiles((prev) => [...prev]);
       }
 
-      // panggil merge-chunks setelah semua chunk sukses
       await mergeChunksOnServer(pf.fileHash!, pf.chunks!.length, pf.file.name, pf.file.type);
       pf.status = 'done';
       setPendingFiles((prev) => [...prev]);
 
       toast.success(`${pf.file.name} berhasil di-upload ke Google Drive!`);
-
-      // refresh daftar file biar langsung muncul
       fetchFiles();
-    } catch (err) {
+    } catch {
       pf.status = 'error';
       setPendingFiles((prev) => [...prev]);
       toast.error(`${pf.file.name} gagal di-upload`);
@@ -240,33 +214,15 @@ const Files: React.FC = () => {
     return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  // helper API calls
   const uploadChunkToServer = async (formData: FormData) => {
-    return axios.post('http://localhost:8000/api/upload-chunk', formData, {
+    return axios.post(`${API_URL}/api/upload-chunk`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
-      withCredentials: true, // biar cookie JWT ikut
-      onUploadProgress: (e) => {
-        if (e.total) {
-          const percent = Math.round((e.loaded * 100) / e.total);
-          // update progress bar di sini kalau mau
-        }
-      },
+      withCredentials: true,
     });
   };
 
   const mergeChunksOnServer = async (uploadId: string, totalChunks: number, fileName: string, mimeType: string) => {
-    return axios.post(
-      'http://localhost:8000/api/merge-chunks',
-      {
-        uploadId,
-        totalChunks,
-        fileName,
-        mimeType,
-      },
-      {
-        withCredentials: true,
-      }
-    );
+    return axios.post(`${API_URL}/api/merge-chunks`, { uploadId, totalChunks, fileName, mimeType }, { withCredentials: true });
   };
 
   return (
@@ -433,7 +389,7 @@ const Files: React.FC = () => {
         )}
 
         {/* Hidden file input */}
-        <input ref={fileInputRef} type="file" onChange={(e) => e.target.files && handleFilesSelected(e.target.files)} className="hidden" accept="*/*" multiple />
+        <input aria-label="file input ref" ref={fileInputRef} type="file" onChange={(e) => e.target.files && handleFilesSelected(e.target.files)} className="hidden" accept="*/*" multiple />
       </div>
     </MainLayout>
   );
