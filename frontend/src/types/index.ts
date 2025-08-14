@@ -17,10 +17,10 @@ export interface Note {
 export interface Link {
   id: number;
   url: string;
-  title: string;
-  description: string;
-  favicon_url: string;
-  category: string;
+  title: string | null;
+  description: string | null;
+  favicon_url: string | null;
+  category: string | null;
   created_at: string;
 }
 
@@ -30,7 +30,7 @@ export interface FileItem {
   storage_url: string;
   mimetype: string;
   size: number;
-  category: string;
+  category: string | null;
   created_at: string;
 }
 
