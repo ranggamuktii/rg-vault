@@ -31,6 +31,8 @@ Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
 
     Route::post('files/upload', [FileController::class, 'upload']);
     Route::get('files/{id}/download', [FileController::class, 'download']);
+    Route::post('/upload-chunk', [FileController::class, 'uploadChunk']);
+    Route::post('/merge-chunks', [FileController::class, 'mergeChunks']);
 
     Route::get('dashboard/stats', [DashboardController::class, 'stats']);
     Route::get('search', [DashboardController::class, 'search']);

@@ -2,72 +2,55 @@
 
 namespace App\Services;
 
-use Google\Client;
-use Google\Service\Drive;
-use Illuminate\Support\Facades\Storage;
+use Google_Client;
+use Google_Service_Drive;
+use Google_Service_Drive_DriveFile;
 
 class GoogleDriveService
 {
-    private $client;
-    private $drive;
+    protected $client;
+    protected $service;
 
     public function __construct()
     {
-        $this->client = new Client();
-        $this->client->setClientId(config('services.google.client_id'));
-        $this->client->setClientSecret(config('services.google.client_secret'));
-        $this->client->setRedirectUri(config('services.google.redirect_uri'));
-        $this->client->setScopes([Drive::DRIVE_FILE]);
+        $this->client = new Google_Client();
+        $this->client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
+        $this->client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
+        $this->client->setRedirectUri(env('GOOGLE_DRIVE_REDIRECT_URI'));
+        $this->client->setScopes(['https://www.googleapis.com/auth/drive.file']);
         $this->client->setAccessType('offline');
         $this->client->setPrompt('select_account consent');
 
-        // Set refresh token if available
-        if (config('services.google.refresh_token')) {
-            $this->client->setRefreshToken(config('services.google.refresh_token'));
-        }
+        $refreshToken = env('GOOGLE_DRIVE_REFRESH_TOKEN');
 
-        $this->drive = new Drive($this->client);
+        // Ambil access token baru dari refresh token
+        $newAccessToken = $this->client->fetchAccessTokenWithRefreshToken($refreshToken);
+
+        // Tambahkan refresh token ke array token agar tidak hilang
+        $newAccessToken['refresh_token'] = $refreshToken;
+
+        // Set token ke client
+        $this->client->setAccessToken($newAccessToken);
+
+        // Inisialisasi service
+        $this->service = new Google_Service_Drive($this->client);
     }
 
-    public function uploadFile($filePath, $fileName, $mimeType, $folderId = null)
+    public function uploadFile($filePath, $filename, $mimeType)
     {
-        $fileMetadata = new Drive\DriveFile([
-            'name' => $fileName,
-            'parents' => $folderId ? [$folderId] : null
-        ]);
-
+        $fileMetadata = new \Google_Service_Drive_DriveFile(['name' => $filename]);
         $content = file_get_contents($filePath);
 
-        $file = $this->drive->files->create($fileMetadata, [
+        $file = $this->service->files->create($fileMetadata, [
             'data' => $content,
             'mimeType' => $mimeType,
             'uploadType' => 'multipart',
-            'fields' => 'id,name,webViewLink,webContentLink'
+            'fields' => 'id, webContentLink'
         ]);
-
-        // Make file publicly accessible
-        $permission = new Drive\Permission([
-            'role' => 'reader',
-            'type' => 'anyone'
-        ]);
-
-        $this->drive->permissions->create($file->id, $permission);
 
         return [
             'id' => $file->id,
-            'name' => $file->name,
-            'webViewLink' => $file->webViewLink,
             'webContentLink' => $file->webContentLink
         ];
-    }
-
-    public function deleteFile($fileId)
-    {
-        return $this->drive->files->delete($fileId);
-    }
-
-    public function getFile($fileId)
-    {
-        return $this->drive->files->get($fileId, ['fields' => 'id,name,webViewLink,webContentLink']);
     }
 }
