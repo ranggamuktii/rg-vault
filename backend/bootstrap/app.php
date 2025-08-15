@@ -13,10 +13,14 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix: 'api',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Alias middleware custom kamu
         $middleware->alias([
             'jwt.cookie' => \App\Http\Middleware\CookieJwtToAuthHeader::class,
         ]);
-        $middleware->group('api', [
+
+        // Tambahkan middleware bawaan CORS ke group API
+        $middleware->appendToGroup('api', [
+            \Illuminate\Http\Middleware\HandleCors::class,
             'jwt.cookie',
         ]);
     })

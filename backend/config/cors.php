@@ -1,6 +1,6 @@
 <?php
 return [
-    'paths' => ['api/*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout'],
     'allowed_methods' => ['*'],
     'allowed_origins' => ['https://vault.ranggamukti.my.id/'],
     'allowed_origins_patterns' => [],
