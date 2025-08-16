@@ -12,6 +12,11 @@ import imageCompression from 'browser-image-compression';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = API_URL.replace(/\/$/, '');
+
+const UPLOAD_CHUNK_URL = `${BASE_URL.replace(/\/api$/, '')}/upload-chunk`;
+
+const MERGE_CHUNKS_URL = BASE_URL.endsWith('/api') ? `${BASE_URL}/merge-chunks` : `${BASE_URL}/api/merge-chunks`;
 
 const Files: React.FC = () => {
   const [uploadCategory, setUploadCategory] = useState('');
@@ -204,14 +209,14 @@ const Files: React.FC = () => {
   };
 
   const uploadChunkToServer = async (formData: FormData) => {
-    return axios.post(`${API_URL}/upload-chunk`, formData, {
+    return axios.post(UPLOAD_CHUNK_URL, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       withCredentials: true,
     });
   };
 
   const mergeChunksOnServer = async (uploadId: string, totalChunks: number, fileName: string, mimeType: string) => {
-    return axios.post(`${API_URL}/api/merge-chunks`, { uploadId, totalChunks, fileName, mimeType }, { withCredentials: true });
+    return axios.post(MERGE_CHUNKS_URL, { uploadId, totalChunks, fileName, mimeType }, { withCredentials: true });
   };
 
   return (
