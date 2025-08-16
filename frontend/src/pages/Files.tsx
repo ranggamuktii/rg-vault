@@ -207,7 +207,7 @@ const Files: React.FC = () => {
   };
 
   const uploadChunkToServer = async (formData: FormData) => {
-    return axios.post(`${API_URL}/api/upload-chunk`, formData, {
+    return axios.post(`${API_URL}/upload-chunk`, formData, {
       headers: { 'Content-Type': 'multipart/form-data', ...authHeaders },
       withCredentials: true,
     });
