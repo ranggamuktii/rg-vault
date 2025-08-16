@@ -10,18 +10,30 @@ type FileActionButtonsProps = {
 export function FileActionButtons({ pf, uploadPendingFile, removePendingFile }: FileActionButtonsProps) {
   if (pf.status === 'pending') {
     return (
-      <button onClick={() => uploadPendingFile(pf)} className="ml-4 px-3 py-1 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-        Upload
-      </button>
+      <div className="ml-4 flex items-center space-x-2">
+        <button onClick={() => uploadPendingFile(pf)} className="px-3 py-1 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+          Upload
+        </button>
+        <button onClick={() => removePendingFile(pf.file.name)} className="px-3 py-1 text-xs bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition inline-flex items-center">
+          <TrashIcon className="h-3 w-3 mr-1" />
+          Delete
+        </button>
+      </div>
     );
   }
 
   if (pf.status === 'uploading') {
     return (
-      <button onClick={() => pf.cancel && pf.cancel()} className="ml-4 px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition inline-flex items-center">
-        <XMarkIcon className="h-3 w-3 mr-1" />
-        Cancel
-      </button>
+      <div className="ml-4 flex items-center space-x-2">
+        <button onClick={() => pf.cancel && pf.cancel()} className="px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition inline-flex items-center">
+          <XMarkIcon className="h-3 w-3 mr-1" />
+          Cancel
+        </button>
+        <button onClick={() => removePendingFile(pf.file.name)} className="px-3 py-1 text-xs bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition inline-flex items-center">
+          <TrashIcon className="h-3 w-3 mr-1" />
+          Delete
+        </button>
+      </div>
     );
   }
 

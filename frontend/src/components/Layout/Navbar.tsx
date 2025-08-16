@@ -16,7 +16,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -105,7 +105,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
                       <p className="text-sm font-semibold text-slate-900">{user?.name}</p>
                       <p className="text-xs text-slate-500">{user?.email}</p>
                     </div>
-                    <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors rounded-b-xl">
+                    <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 transition-colors rounded-b-xl">
                       Sign out
                     </button>
                   </div>

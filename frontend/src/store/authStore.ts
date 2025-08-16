@@ -37,11 +37,11 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         try {
           const { data } = await api.post('/auth/login', { email, password });
-      
+
           if (data.access_token) {
             localStorage.setItem('token', data.access_token);
           }
-      
+
           set({
             user: data.user,
             isAuthenticated: true,
@@ -72,7 +72,7 @@ export const useAuthStore = create<AuthState>()(
             set({ user: null, isAuthenticated: false, isLoading: false });
             return;
           }
-      
+
           const { data } = await api.get<{ user: User }>('/auth/me');
           set({
             user: data.user,
@@ -83,7 +83,7 @@ export const useAuthStore = create<AuthState>()(
           localStorage.removeItem('token');
           set({ user: null, isAuthenticated: false, isLoading: false });
         }
-      },      
+      },
     }),
     {
       name: 'auth-storage',

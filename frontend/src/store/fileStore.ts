@@ -58,7 +58,6 @@ export const useFileStore = create<FileState>((set, get) => ({
   uploadFile: async (file, category) => {
     set({ isUploading: true, error: null });
     try {
-
       const formData = new FormData();
       formData.append('file', file);
       if (category) formData.append('category', category);
@@ -68,7 +67,6 @@ export const useFileStore = create<FileState>((set, get) => ({
           'Content-Type': 'multipart/form-data',
         },
       });
-
 
       const newFile = response.data;
       set({
