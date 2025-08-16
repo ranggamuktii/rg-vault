@@ -65,6 +65,14 @@ export const useAuthStore = create<AuthState>()(
       checkAuth: async () => {
         set({ isLoading: true });
         try {
+          const token = localStorage.getItem('token');
+          if (token) {
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          } else {
+            set({ user: null, isAuthenticated: false, isLoading: false });
+            return;
+          }
+      
           const { data } = await api.get<{ user: User }>('/auth/me');
           set({
             user: data.user,
@@ -72,9 +80,10 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
           });
         } catch (error) {
+          localStorage.removeItem('token');
           set({ user: null, isAuthenticated: false, isLoading: false });
         }
-      },
+      },      
     }),
     {
       name: 'auth-storage',
