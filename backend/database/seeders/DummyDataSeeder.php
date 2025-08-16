@@ -24,16 +24,16 @@ class DummyDataSeeder extends Seeder
 
         // Create users
         $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password123'),
+            'name' => 'Rangga Mukti',
+            'email' => 'daniswara.ranggamukti@gmail.com',
+            'password' => Hash::make('rangga123'),
             'role' => 'admin',
             'email_verified_at' => now(),
         ]);
 
         $test = User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'User',
+            'email' => 'user@gmail.com',
             'password' => Hash::make('password123'),
             'role' => 'admin',
             'email_verified_at' => now(),
