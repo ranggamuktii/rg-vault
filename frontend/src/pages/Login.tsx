@@ -1,6 +1,8 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { useAuthStore } from '../store/authStore';
 
@@ -14,7 +16,7 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const { login } = useAuthStore();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const {
     register,
@@ -45,7 +47,7 @@ const Login: React.FC = () => {
 
       await login(data.email, data.password);
       toast.success('Login successful!');
-      navigate('/dashboard');
+      router.push('/dashboard'); // Updated from navigate to router.push for Next.js
     } catch (error: unknown) {
       if (
         error &&
@@ -69,35 +71,46 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-blue-50 via-white to-blue-100 px-4 py-12">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-12">
+      {' '}
+      {/* Updated gradient colors to match RG Vault palette */}
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center animate-fadeIn">
-        <div className="mx-auto h-14 w-14 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg mb-6">
-          <svg className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="mx-auto h-16 w-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg mb-6">
+          {' '}
+          {/* Updated to RG Vault brand colors and larger size */}
+          <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            {' '}
+            {/* Larger icon */}
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
         </div>
-        <h2 className="text-3xl font-semibold text-gray-900 tracking-tight mb-2">{isRegister ? 'Create account' : 'Sign in'}</h2>
-        <p className="text-sm text-gray-500">{isRegister ? 'Get started with your personal hub' : 'Welcome back to your personal hub'}</p>
+        <h2 className="text-3xl font-semibold text-slate-900 tracking-tight mb-2">{isRegister ? 'Create account' : 'Sign in to RG Vault'}</h2> {/* Updated title to include RG Vault branding */}
+        <p className="text-sm text-slate-600">{isRegister ? 'Get started with your productivity hub' : 'Welcome back to your productivity hub'}</p> {/* Updated description and text color */}
       </div>
-
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md w-full animate-slideUp">
-        <div className="bg-white/80 backdrop-blur-lg py-8 px-6 shadow-xl rounded-2xl border border-gray-100 transition-all duration-300 hover:shadow-2xl">
+        <div className="bg-white/90 backdrop-blur-xl py-8 px-6 shadow-xl rounded-2xl border border-white/20 transition-all duration-300 hover:shadow-2xl">
+          {' '}
+          {/* Enhanced backdrop blur and border styling */}
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             {isRegister && (
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+                  {' '}
+                  {/* Updated text color */}
                   Full Name
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" /* Updated colors to match RG Vault palette */
                   placeholder="Enter your full name"
                 />
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+                {' '}
+                {/* Updated text color */}
                 Email
               </label>
               <input
@@ -109,14 +122,16 @@ const Login: React.FC = () => {
                   },
                 })}
                 type="email"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" /* Updated colors to match RG Vault palette */
                 placeholder="Enter your email"
               />
               {errors.email && <p className="mt-2 text-sm text-red-500">{errors.email.message}</p>}
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+                {' '}
+                {/* Updated text color */}
                 Password
               </label>
               <input
@@ -128,7 +143,7 @@ const Login: React.FC = () => {
                   },
                 })}
                 type="password"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" /* Updated colors to match RG Vault palette */
                 placeholder="Enter your password"
               />
               {errors.password && <p className="mt-2 text-sm text-red-500">{errors.password.message}</p>}
@@ -137,8 +152,8 @@ const Login: React.FC = () => {
             {/* Remember Me */}
             <div className="flex items-center justify-between">
               <label className="flex items-center space-x-2">
-                <input type="checkbox" {...register('rememberMe')} className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" />
-                <span className="text-sm text-gray-600">Remember me</span>
+                <input type="checkbox" {...register('rememberMe')} className="h-4 w-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500" /> {/* Updated border color */}
+                <span className="text-sm text-slate-600">Remember me</span> {/* Updated text color */}
               </label>
               <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
                 Forgot password?
@@ -149,7 +164,7 @@ const Login: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-3 px-4 rounded-xl shadow-md text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-0.5"
+                className="w-full flex justify-center py-3 px-4 rounded-xl shadow-md text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-0.5" /* Updated gradient colors to match RG Vault brand */
               >
                 {isLoading ? (
                   <div className="flex items-center">
