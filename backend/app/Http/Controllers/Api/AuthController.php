@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    /**
-     * Register user baru
-     */
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -35,10 +33,7 @@ class AuthController extends Controller
 
         return $this->respondWithToken($token, $user);
     }
-
-    /**
-     * Login user
-     */
+    
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -61,9 +56,6 @@ class AuthController extends Controller
         return $this->respondWithToken($token, $user);
     }
 
-    /**
-     * Ambil data user yang sedang login
-     */
     public function me()
     {
         $user = auth('api')->user();
@@ -73,9 +65,6 @@ class AuthController extends Controller
         return response()->json(['user' => $user]);
     }
 
-    /**
-     * Logout user
-     */
     public function logout()
     {
         try {
@@ -98,9 +87,6 @@ class AuthController extends Controller
             );
     }
 
-    /**
-     * Refresh token JWT
-     */
     public function refresh()
     {
         $new = auth('api')->refresh();
@@ -109,9 +95,6 @@ class AuthController extends Controller
         return $this->respondWithToken($new, $user);
     }
 
-    /**
-     * Helper: balas JSON + set cookie JWT HttpOnly
-     */
     protected function respondWithToken(string $token, $user)
     {
         $ttlMinutes = auth('api')->factory()->getTTL();
