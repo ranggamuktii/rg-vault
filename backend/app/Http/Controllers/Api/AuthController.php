@@ -115,27 +115,27 @@ class AuthController extends Controller
      * Helper: balas JSON + set cookie JWT HttpOnly
      */
     protected function respondWithTokenCookie(string $token, $user)
-    {
-        $ttlMinutes = auth('api')->factory()->getTTL(); // menit
+{
+    $ttlMinutes = auth('api')->factory()->getTTL(); // menit
 
-        // NOTE: kita TIDAK perlu kirim access_token ke FE lagi.
-        // Kalau masih mau kompatibel, bisa kirim; FE kamu abaikan saja.
-        return response()->json([
-            'user'        => $user,
-            'token_type'  => 'bearer',
-            'expires_in'  => $ttlMinutes * 60, // detik
-        ])->cookie(
-            'access_token',
-            $token,
-            $ttlMinutes,                 // menit
-            '/',
-            config('session.domain'),    // sesuaikan bila perlu (mis. .yourdomain.com)
-            $this->cookieSecure(),
-            true,                        // HttpOnly
-            false,
-            $this->cookieSameSite()
-        );
-    }
+    return response()->json([
+        'access_token' => $token,
+        'token_type'   => 'bearer',
+        'expires_in'   => $ttlMinutes * 60,
+        'user'         => $user,
+    ])->cookie(
+        'access_token',
+        $token,
+        $ttlMinutes,
+        '/',
+        config('session.domain'),  
+        $this->cookieSecure(),
+        true,
+        false,
+        $this->cookieSameSite()
+    );
+}
+
 
     protected function cookieSecure(): bool
     {

@@ -36,9 +36,12 @@ export const useAuthStore = create<AuthState>()(
       login: async (email: string, password: string) => {
         set({ isLoading: true });
         try {
-          await api.post('/auth/login', { email, password });
-          // Setelah cookie terpasang, ambil profil
-          const { data } = await api.get<{ user: User }>('/auth/me');
+          const { data } = await api.post('/auth/login', { email, password });
+      
+          if (data.access_token) {
+            localStorage.setItem('token', data.access_token);
+          }
+      
           set({
             user: data.user,
             isAuthenticated: true,
