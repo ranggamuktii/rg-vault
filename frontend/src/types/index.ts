@@ -40,3 +40,21 @@ export interface AuthResponse {
   expires_in: number;
   user: User;
 }
+
+export type PendingFileStatus = 'pending' | 'uploading' | 'done' | 'error' | 'canceled';
+
+export interface ChunkInfo {
+  index: number;
+  blob: Blob;
+  uploaded: boolean;
+}
+
+export interface PendingFile {
+  file: File;
+  preview: string | null;
+  progress: number;
+  status: PendingFileStatus;
+  chunks?: ChunkInfo[];
+  fileHash?: string;
+  cancel?: () => void;
+}

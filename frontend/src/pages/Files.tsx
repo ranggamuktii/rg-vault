@@ -3,28 +3,13 @@ import { toast } from 'react-hot-toast';
 import { PlusIcon, TrashIcon, ArrowDownTrayIcon, DocumentIcon, PhotoIcon, VideoCameraIcon, MusicalNoteIcon, ArchiveBoxIcon } from '@heroicons/react/24/outline';
 import MainLayout from '../components/Layout/MainLayout';
 import { useFileStore } from '../store/fileStore';
-import type { FileItem } from '../types';
+import { FileActionButtons } from '../utils/FileActionButtons';
+import type { FileItem, PendingFile, ChunkInfo } from '../types';
 
 import axios from 'axios';
 import SparkMD5 from 'spark-md5';
 import imageCompression from 'browser-image-compression';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-type ChunkInfo = {
-  index: number;
-  blob: Blob;
-  uploaded: boolean;
-};
-
-type PendingFile = {
-  file: File;
-  preview: string | null;
-  progress: number;
-  status: 'pending' | 'uploading' | 'done' | 'error' | 'canceled';
-  chunks?: ChunkInfo[];
-  fileHash?: string;
-  cancel?: () => void;
-};
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -172,6 +157,10 @@ const Files: React.FC = () => {
     }
   };
 
+  const removePendingFile = (filename: string) => {
+    setPendingFiles((files) => files.filter((f) => f.file.name !== filename));
+  };
+
   const startUploadAll = () => {
     setPendingFiles((prev) =>
       prev.map((pf) => {
@@ -215,7 +204,7 @@ const Files: React.FC = () => {
   };
 
   const uploadChunkToServer = async (formData: FormData) => {
-    return axios.post(`${API_URL}/api/upload-chunk`, formData, {
+    return axios.post(`${API_URL}/upload-chunk`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       withCredentials: true,
     });
@@ -227,108 +216,103 @@ const Files: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-8">
+      <div className="space-y-12">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-normal text-gray-900">Files</h1>
-            <p className="text-gray-600 mt-1">Store and manage your documents</p>
-          </div>
-          <button onClick={handleFileSelect} className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-sm font-medium">
-            <PlusIcon className="h-5 w-5 mr-2" />
-            Upload Files
-          </button>
-        </div>
-
-        {/* Upload Dropzone */}
-        <div
-          onClick={handleFileSelect}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            if (e.dataTransfer.files.length > 0) handleFilesSelected(e.dataTransfer.files);
-          }}
-          className="relative group cursor-pointer rounded-2xl border-2 border-dashed border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100 p-8 transition-all hover:border-blue-500 hover:from-blue-50 hover:to-blue-100"
-        >
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="p-4 rounded-full bg-white shadow-sm group-hover:shadow-md transition-all">
-              <PlusIcon className="h-8 w-8 text-blue-500" />
-            </div>
-            <div>
-              <p className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors">Drag & Drop files here</p>
-              <p className="text-sm text-gray-500 mt-1">or click to browse</p>
-            </div>
+            <h1 className="text-4xl font-semibold text-gray-900">📂 Files</h1>
+            <p className="text-gray-600 mt-2 text-lg">Store and manage your documents with ease</p>
           </div>
         </div>
 
-        {/* Category input */}
-        <div className="max-w-xs">
-          <input
-            type="text"
-            placeholder="Category for upload (optional)"
-            value={uploadCategory}
-            onChange={(e) => setUploadCategory(e.target.value)}
-            className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
-          />
-        </div>
-
-        {/* Pending files with reorder */}
-        {pendingFiles.length > 0 && (
-          <DragDropContext
-            onDragEnd={(result) => {
-              if (!result.destination) return;
-              const items = Array.from(pendingFiles);
-              const [reordered] = items.splice(result.source.index, 1);
-              items.splice(result.destination.index, 0, reordered);
-              setPendingFiles(items);
+        {/* Upload Section */}
+        <div className="space-y-6">
+          {/* Dropzone */}
+          <div
+            onClick={handleFileSelect}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (e.dataTransfer.files.length > 0) handleFilesSelected(e.dataTransfer.files);
             }}
+            className="relative group cursor-pointer rounded-2xl border-2 border-dashed border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100 p-12 transition-all hover:border-blue-500 hover:from-blue-50 hover:to-blue-100"
           >
-            <Droppable droppableId="pending-files">
-              {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef} className="mt-6 space-y-4">
-                  {pendingFiles.map((pf, idx) => (
-                    <Draggable key={pf.file.name} draggableId={pf.file.name} index={idx}>
-                      {(provided) => (
-                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="flex items-center p-4 bg-white rounded-xl shadow-sm border hover:shadow-md transition">
-                          {pf.preview ? <img src={pf.preview} alt={pf.file.name} className="h-12 w-12 rounded-lg object-cover" /> : <DocumentIcon className="h-12 w-12 text-gray-400" />}
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="p-5 rounded-full bg-white shadow-md group-hover:shadow-lg transition-all">
+                <PlusIcon className="h-10 w-10 text-blue-500" />
+              </div>
+              <div>
+                <p className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors">Drag & Drop files here</p>
+                <p className="text-sm text-gray-500 mt-1">or click to browse</p>
+              </div>
+            </div>
+          </div>
 
-                          <div className="ml-4 flex-1">
-                            <p className="text-sm font-medium truncate">{pf.file.name}</p>
-                            <div className="w-full bg-gray-200 rounded-full h-2 mt-1 overflow-hidden">
-                              <div
-                                className={`h-2 rounded-full transition-all duration-200 ${
-                                  pf.status === 'error' ? 'bg-red-500' : pf.status === 'done' ? 'bg-green-500' : pf.status === 'canceled' ? 'bg-yellow-500' : 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient-x'
-                                }`}
-                                style={{ width: `${pf.progress}%` }}
-                              />
+          {/* Category Input */}
+          <div className="max-w-sm">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Category (optional)</label>
+            <input
+              type="text"
+              placeholder="e.g. Invoices, Reports, Photos..."
+              value={uploadCategory}
+              onChange={(e) => setUploadCategory(e.target.value)}
+              className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm shadow-sm"
+            />
+          </div>
+        </div>
+
+        {/* Pending files */}
+        {pendingFiles.length > 0 && (
+          <div className="space-y-6">
+            <h2 className="text-lg font-semibold text-gray-800">Pending Uploads</h2>
+            <DragDropContext
+              onDragEnd={(result) => {
+                if (!result.destination) return;
+                const items = Array.from(pendingFiles);
+                const [reordered] = items.splice(result.source.index, 1);
+                items.splice(result.destination.index, 0, reordered);
+                setPendingFiles(items);
+              }}
+            >
+              <Droppable droppableId="pending-files">
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-4">
+                    {pendingFiles.map((pf, idx) => (
+                      <Draggable key={pf.file.name} draggableId={pf.file.name} index={idx}>
+                        {(provided) => (
+                          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="flex items-center p-4 bg-white rounded-xl shadow-sm border hover:shadow-md transition">
+                            {pf.preview ? <img src={pf.preview} alt={pf.file.name} className="h-12 w-12 rounded-lg object-cover" /> : <DocumentIcon className="h-12 w-12 text-gray-400" />}
+
+                            <div className="ml-4 flex-1">
+                              <p className="text-sm font-medium truncate">{pf.file.name}</p>
+                              <div className="w-full bg-gray-200 rounded-full h-2 mt-1 overflow-hidden">
+                                <div
+                                  className={`h-2 rounded-full transition-all duration-200 ${
+                                    pf.status === 'error' ? 'bg-red-500' : pf.status === 'done' ? 'bg-green-500' : pf.status === 'canceled' ? 'bg-yellow-500' : 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient-x'
+                                  }`}
+                                  style={{ width: `${pf.progress}%` }}
+                                />
+                              </div>
                             </div>
-                          </div>
 
-                          {pf.status === 'pending' && (
-                            <button onClick={() => uploadPendingFile(pf)} className="ml-4 px-3 py-1 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                              Upload
-                            </button>
-                          )}
-                          {pf.status === 'uploading' && (
-                            <button onClick={() => pf.cancel && pf.cancel()} className="ml-4 px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-                              Cancel
-                            </button>
-                          )}
-                          {pf.status === 'done' && <span className="ml-4 text-green-600 font-bold">✓</span>}
-                          {pf.status === 'error' && <span className="ml-4 text-red-600 font-bold">✗</span>}
-                          {pf.status === 'canceled' && <span className="ml-4 text-yellow-600 font-bold">⚠</span>}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                  <button onClick={startUploadAll} className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium">
-                    Upload All Files
-                  </button>
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+                            {/* tombol dihandle komponen terpisah */}
+                            <FileActionButtons pf={pf} uploadPendingFile={uploadPendingFile} removePendingFile={removePendingFile} />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+
+              <div className="pt-4">
+                <button onClick={startUploadAll} className="w-full px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium shadow-sm">
+                  Upload All Files
+                </button>
+              </div>
+            </DragDropContext>
+          </div>
         )}
 
         {/* Files Grid */}
@@ -337,11 +321,11 @@ const Files: React.FC = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {files.map((file) => {
               const FileIconComponent = getFileIcon(file.mimetype);
               return (
-                <div key={file.id} className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all group">
+                <div key={file.id} className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all group">
                   <div className="mb-4">
                     {file.mimetype.startsWith('image/') ? (
                       <div className="w-full h-32 bg-gray-50 rounded-xl overflow-hidden">
