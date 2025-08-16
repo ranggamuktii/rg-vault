@@ -1,6 +1,8 @@
-import type React from 'react';
+'use client';
 
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import type React from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { HomeIcon, DocumentTextIcon, LinkIcon, FolderIcon, XMarkIcon, CommandLineIcon, MagnifyingGlassIcon, StarIcon, ClockIcon, UserCircleIcon, Bars3Icon } from '@heroicons/react/24/outline';
 import { clsx } from 'clsx';
 import { useNoteStore } from '../../store/noteStore';
@@ -23,8 +25,8 @@ const navigation = [
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
+  const router = useRouter();
   const { createNote } = useNoteStore();
   const { user, logout } = useAuthStore();
 
@@ -85,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
       await Promise.resolve(logout());
     } finally {
       setShowUserMenu(false);
-      navigate('/');
+      router.push('/login');
     }
   };
 
@@ -110,11 +112,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
       )}
 
       {/* Sidebar */}
-      <div className={clsx('fixed inset-y-0 left-0 z-50 w-80 transform lg:translate-x-0 lg:static lg:inset-0', 'transition-transform duration-300 ease-[cubic-bezier(.22,1,.36,1)]', isOpen ? 'translate-x-0' : '-translate-x-full')}>
-        <div className="h-full border-r bg-white/80 backdrop-blur-xl border-white/20 flex flex-col">
-          <div className="flex items-center justify-between h-16 px-6 border-b border-white/20">
-            <Link to="/dashboard" className="flex items-center group">
-              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-md flex items-center justify-center mr-3 transition-transform group-hover:rotate-6">
+      <div className={clsx('fixed inset-y-0 left-0 z-50 w-72 sm:w-80 transform lg:translate-x-0 lg:static lg:inset-0', 'transition-transform duration-300 ease-[cubic-bezier(.22,1,.36,1)]', isOpen ? 'translate-x-0' : '-translate-x-full')}>
+        <div className="h-full max-h-screen border-r bg-white/80 backdrop-blur-xl border-white/20 flex flex-col overflow-hidden">
+          <div className="flex items-center justify-between h-16 px-6 border-b border-white/20 flex-shrink-0">
+            <Link href="/dashboard" className="flex items-center group">
+              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 shadow-md flex items-center justify-center mr-3 transition-transform group-hover:rotate-6">
                 <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path
                     strokeLinecap="round"
@@ -131,7 +133,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
             </button>
           </div>
 
-          <div className="px-6 py-4 border-b border-white/20">
+          <div className="px-6 py-4 border-b border-white/20 flex-shrink-0">
             <button
               type="button"
               onClick={() => setShowGlobalSearch(true)}
@@ -147,18 +149,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
           </div>
 
           {/* Navigation */}
-          <nav className="px-4 flex-1 py-4">
+          <nav className="px-4 flex-1 py-4 overflow-y-auto">
             <ul className="space-y-1.5">
               {navigation.map((item) => {
-                const isActive = location.pathname === item.href;
+                const isActive = pathname === item.href;
                 return (
                   <li key={item.name}>
                     <Link
-                      to={item.href}
+                      href={item.href}
                       onClick={onClose}
                       className={clsx(
                         'group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all',
-                        isActive ? 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 ring-1 ring-blue-500/20 shadow-sm' : 'text-slate-700 hover:bg-white/70 hover:ring-1 hover:ring-slate-200'
+                        isActive ? 'bg-gradient-to-r from-blue-50 to-blue-50 text-blue-700 ring-1 ring-blue-500/20 shadow-sm' : 'text-slate-700 hover:bg-white/70 hover:ring-1 hover:ring-slate-200'
                       )}
                     >
                       <item.icon className={clsx('h-5 w-5 transition-all', isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600 group-hover:scale-110')} />
@@ -171,7 +173,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
           </nav>
 
           {/* Quick Actions */}
-          <div className="p-6 border-t border-white/20 space-y-2">
+          <div className="p-6 border-t border-white/20 space-y-2 flex-shrink-0">
             <button
               onClick={() => setShowQuickCapture(true)}
               className="flex items-center gap-3 w-full p-3 rounded-xl bg-gradient-to-r from-orange-50 to-amber-50 hover:from-orange-100 hover:to-amber-100 transition-all ring-1 ring-orange-200/50"
@@ -185,8 +187,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
               </div>
             </button>
 
-            <button onClick={() => navigate('/search')} className="flex items-center gap-3 w-full p-3 rounded-xl bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 transition-all ring-1 ring-indigo-200/50">
-              <div className="p-2 bg-gradient-to-br from-indigo-400 to-blue-500 rounded-lg shadow-sm">
+            <button onClick={() => router.push('/search')} className="flex items-center gap-3 w-full p-3 rounded-xl bg-gradient-to-r from-blue-50 to-blue-50 hover:from-blue-100 hover:to-blue-100 transition-all ring-1 ring-blue-200/50">
+              <div className="p-2 bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg shadow-sm">
                 <MagnifyingGlassIcon className="h-4 w-4 text-white" />
               </div>
               <div className="text-left">
@@ -222,7 +224,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
             </button>
           </div>
 
-          <div className="p-6 border-t border-white/20">
+          <div className="p-6 border-t border-white/20 flex-shrink-0">
             <div className="relative">
               <button
                 type="button"
@@ -254,7 +256,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
                     <p className="text-xs text-slate-500 truncate">{user?.email}</p>
                   </div>
 
-                  <Link to="/profile" role="menuitem" className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors" onClick={() => setShowUserMenu(false)}>
+                  <Link href="/profile" role="menuitem" className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors" onClick={() => setShowUserMenu(false)}>
                     Profile Settings
                   </Link>
 
