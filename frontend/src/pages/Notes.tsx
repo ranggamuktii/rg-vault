@@ -4,6 +4,7 @@ import type React from 'react';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import JoditEditor from 'jodit-react';
 import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon, SparklesIcon, BookmarkIcon } from '@heroicons/react/24/outline';
 import MainLayout from '../components/Layout/MainLayout';
 import { useNoteStore } from '../store/noteStore';
@@ -21,6 +22,7 @@ const Notes: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+  const [editorContent, setEditorContent] = useState('');
 
   const { notes, isLoading, fetchNotes, createNote, updateNote, deleteNote } = useNoteStore();
   const {
@@ -30,6 +32,29 @@ const Notes: React.FC = () => {
     setValue,
     formState: { errors },
   } = useForm<NoteForm>();
+
+  const editorConfig = useMemo(
+    () => ({
+      readonly: false,
+      placeholder: 'Start writing your thoughts...',
+      height: 300,
+      toolbar: true,
+      spellcheck: true,
+      language: 'en',
+      toolbarButtonSize: 'small',
+      theme: 'default',
+      saveModeInCookie: false,
+      buttons: ['bold', 'italic', 'underline', '|', 'ul', 'ol', '|', 'link', '|', 'align', '|', 'undo', 'redo', '|', 'hr', 'eraser', 'fullsize'],
+      removeButtons: ['source', 'fullsize', 'about', 'outdent', 'indent', 'video', 'print', 'table', 'fontsize', 'brush', 'file'],
+      showCharsCounter: false,
+      showWordsCounter: false,
+      showXPathInStatusbar: false,
+      askBeforePasteHTML: false,
+      askBeforePasteFromWord: false,
+      defaultActionOnPaste: 'insert_clear_html',
+    }),
+    []
+  );
 
   useEffect(() => {
     fetchNotes();
@@ -50,10 +75,12 @@ const Notes: React.FC = () => {
       setEditingNote(note);
       setValue('title', note.title);
       setValue('content', note.content);
+      setEditorContent(note.content);
       setValue('tags', note.tags?.join(', ') || '');
     } else {
       setEditingNote(null);
       reset();
+      setEditorContent('');
     }
     setIsPreviewOpen(false);
     setIsEditorOpen(true);
@@ -64,13 +91,14 @@ const Notes: React.FC = () => {
     setIsPreviewOpen(false);
     setEditingNote(null);
     reset();
+    setEditorContent('');
   }, [reset]);
 
   const onSubmit = async (data: NoteForm) => {
     try {
       const payload = {
         title: data.title,
-        content: data.content,
+        content: editorContent,
         tags: data.tags
           ? data.tags
               .split(',')
@@ -138,7 +166,7 @@ const Notes: React.FC = () => {
     <MainLayout>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
         <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-          <div className={`transition-all duration-700 ease-out ${panelOpen ? 'lg:grid lg:grid-cols-[1fr_480px] gap-12' : 'lg:grid-cols-[1fr_0px]'}`}>
+          <div className={`transition-all duration-700 ease-out ${panelOpen ? 'lg:grid lg:grid-cols-[1fr_600px] gap-12' : 'lg:grid-cols-[1fr_0px]'}`}>
             {/* LEFT: Notes List */}
             <div className="space-y-10 min-w-0">
               <div className="relative">
@@ -294,7 +322,7 @@ const Notes: React.FC = () => {
 
             <aside
               className={`
-                fixed top-0 right-0 z-40 w-[480px] h-screen
+                fixed top-0 right-0 z-40 w-[600px] h-screen
                 bg-white/95 backdrop-blur-xl border-l border-slate-200/60 shadow-2xl shadow-slate-900/10
                 transition-all duration-700 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
                 ${panelOpen ? 'translate-x-0' : 'translate-x-full'}
@@ -335,15 +363,9 @@ const Notes: React.FC = () => {
                       <label htmlFor="content" className="block text-sm font-semibold text-slate-700 mb-3">
                         Content
                       </label>
-                      <textarea
-                        id="content"
-                        placeholder="Start writing your thoughts..."
-                        {...register('content', { required: 'Content is required' })}
-                        rows={12}
-                        className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
-                                   focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
-                                   transition-all duration-200 text-slate-900 placeholder:text-slate-400 resize-none"
-                      />
+                      <div className="rounded-2xl overflow-hidden border border-slate-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 transition-all duration-200">
+                        <JoditEditor value={editorContent} config={editorConfig} onBlur={(newContent) => setEditorContent(newContent)} onChange={(newContent) => setEditorContent(newContent)} />
+                      </div>
                       {errors.content && <p className="mt-2 text-sm text-red-600">{errors.content.message}</p>}
                     </div>
 
@@ -397,10 +419,10 @@ const Notes: React.FC = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="space-y-6">
+                  <div className="space-y-8">
                     <div>
-                      <h2 className="text-3xl font-bold text-slate-900 mb-3 leading-tight font-serif">{selectedNote.title}</h2>
-                      <div className="text-sm text-slate-500 flex items-center gap-2">
+                      <h2 className="text-3xl font-bold text-slate-900 mb-4 leading-tight font-serif">{selectedNote.title}</h2>
+                      <div className="text-sm text-slate-500 flex items-center gap-2 mb-6">
                         <BookmarkIcon className="w-4 h-4" />
                         {new Date(selectedNote.created_at).toLocaleString('en-US', {
                           year: 'numeric',
@@ -410,11 +432,12 @@ const Notes: React.FC = () => {
                           minute: '2-digit',
                         })}
                       </div>
+                      <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8"></div>
                     </div>
 
                     {/* Tags */}
                     {selectedNote.tags?.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 mb-8">
                         {selectedNote.tags.map((tag, i) => (
                           <span key={i} className={`inline-flex items-center px-4 py-2 rounded-2xl text-sm font-medium border ${getTagColor(i)}`}>
                             {tag}
@@ -424,30 +447,38 @@ const Notes: React.FC = () => {
                     )}
 
                     {/* Content */}
-                    <article className="prose prose-slate max-w-none text-slate-700 leading-relaxed whitespace-pre-wrap text-base">{selectedNote.content}</article>
+                    <article className="prose prose-slate max-w-none text-slate-700 leading-relaxed text-base mb-8" dangerouslySetInnerHTML={{ __html: selectedNote.content }} />
 
                     {/* Actions */}
-                    <div className="flex gap-3 pt-8 border-t border-slate-100">
+                    <div className="flex gap-4 pt-8 border-t border-slate-100">
                       <button
                         type="button"
                         onClick={() => openEditor(selectedNote)}
-                        className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-blue-50 text-blue-700 hover:bg-blue-100 
-                                   transition-colors font-medium"
+                        className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 
+                                   text-blue-700 hover:from-blue-100 hover:to-indigo-100 border border-blue-200/50
+                                   transition-all duration-200 font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5
+                                   hover:border-blue-300/50"
                         title="Edit note"
                         aria-label="Edit note"
                       >
-                        <PencilIcon className="w-4 h-4" />
+                        <div className="p-1.5 bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg shadow-sm">
+                          <PencilIcon className="w-4 h-4 text-white" />
+                        </div>
                         Edit Note
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDelete(selectedNote.id)}
-                        className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-red-50 text-red-700 hover:bg-red-100 
-                                   transition-colors font-medium"
+                        className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-r from-red-50 to-rose-50 
+                                   text-red-700 hover:from-red-100 hover:to-rose-100 border border-red-200/50
+                                   transition-all duration-200 font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5
+                                   hover:border-red-300/50"
                         title="Delete note"
                         aria-label="Delete note"
                       >
-                        <TrashIcon className="w-4 h-4" />
+                        <div className="p-1.5 bg-gradient-to-br from-red-400 to-red-500 rounded-lg shadow-sm">
+                          <TrashIcon className="w-4 h-4 text-white" />
+                        </div>
                         Delete
                       </button>
                     </div>
