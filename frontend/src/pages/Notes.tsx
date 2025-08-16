@@ -34,25 +34,18 @@ const Notes: React.FC = () => {
   } = useForm<NoteForm>();
 
   const editorConfig = useMemo(
-    () => ({
-      readonly: false,
-      placeholder: 'Start writing your thoughts...',
-      height: 300,
-      toolbar: true,
-      spellcheck: true,
-      language: 'en',
-      toolbarButtonSize: 'small',
-      theme: 'default',
-      saveModeInCookie: false,
-      buttons: ['bold', 'italic', 'underline', '|', 'ul', 'ol', '|', 'link', '|', 'align', '|', 'undo', 'redo', '|', 'hr', 'eraser', 'fullsize'],
-      removeButtons: ['source', 'fullsize', 'about', 'outdent', 'indent', 'video', 'print', 'table', 'fontsize', 'brush', 'file'],
-      showCharsCounter: false,
-      showWordsCounter: false,
-      showXPathInStatusbar: false,
-      askBeforePasteHTML: false,
-      askBeforePasteFromWord: false,
-      defaultActionOnPaste: 'insert_clear_html',
-    }),
+    () =>
+      ({
+        readonly: false,
+        placeholder: 'Start writing your thoughts...',
+        height: 300,
+        buttons: ['bold', 'italic', 'underline', '|', 'ul', 'ol', '|', 'link', '|', 'align', '|', 'undo', 'redo', '|', 'hr', 'eraser'],
+        removeButtons: ['source', 'fullsize', 'about', 'outdent', 'indent', 'video', 'print', 'table', 'fontsize', 'brush', 'file'],
+        showCharsCounter: false,
+        showWordsCounter: false,
+        askBeforePasteHTML: false,
+        askBeforePasteFromWord: false,
+      } as any),
     []
   );
 
