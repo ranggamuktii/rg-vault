@@ -33,7 +33,6 @@ export const useNoteStore = create<NoteState>((set, get) => ({
       if (search) params.append('search', search);
 
       const response = await api.get(`/notes?${params.toString()}`);
-      console.log('Notes API response:', response.data); // Debug log
 
       const notesData = response.data.data || response.data;
       set({
@@ -52,9 +51,7 @@ export const useNoteStore = create<NoteState>((set, get) => ({
 
   createNote: async (data) => {
     try {
-      console.log('Creating note:', data); // Debug log
       const response = await api.post('/notes', data);
-      console.log('Create note response:', response.data); // Debug log
 
       const newNote = response.data;
       set({ notes: [newNote, ...get().notes] });
@@ -66,9 +63,7 @@ export const useNoteStore = create<NoteState>((set, get) => ({
 
   updateNote: async (id, data) => {
     try {
-      console.log('Updating note:', id, data); // Debug log
       const response = await api.put(`/notes/${id}`, data);
-      console.log('Update note response:', response.data); // Debug log
 
       const updatedNote = response.data;
       set({
@@ -82,7 +77,6 @@ export const useNoteStore = create<NoteState>((set, get) => ({
 
   deleteNote: async (id) => {
     try {
-      console.log('Deleting note:', id); // Debug log
       await api.delete(`/notes/${id}`);
       set({
         notes: get().notes.filter((note) => note.id !== id),

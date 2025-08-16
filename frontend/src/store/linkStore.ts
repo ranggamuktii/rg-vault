@@ -36,7 +36,6 @@ export const useLinkStore = create<LinkState>((set, get) => ({
       if (category) params.append('category', category);
 
       const response = await api.get(`/links?${params.toString()}`);
-      console.log('Links API response:', response.data); // Debug log
 
       const linksData = response.data.data || response.data;
       set({
@@ -55,9 +54,7 @@ export const useLinkStore = create<LinkState>((set, get) => ({
 
   createLink: async (data) => {
     try {
-      console.log('Creating link:', data); // Debug log
       const response = await api.post('/links', data);
-      console.log('Create link response:', response.data); // Debug log
 
       const newLink = response.data;
       set({ links: [newLink, ...get().links] });
@@ -69,9 +66,7 @@ export const useLinkStore = create<LinkState>((set, get) => ({
 
   updateLink: async (id, data) => {
     try {
-      console.log('Updating link:', id, data); // Debug log
       const response = await api.put(`/links/${id}`, data);
-      console.log('Update link response:', response.data); // Debug log
 
       const updatedLink = response.data;
       set({
@@ -85,7 +80,6 @@ export const useLinkStore = create<LinkState>((set, get) => ({
 
   deleteLink: async (id) => {
     try {
-      console.log('Deleting link:', id); // Debug log
       await api.delete(`/links/${id}`);
       set({
         links: get().links.filter((link) => link.id !== id),

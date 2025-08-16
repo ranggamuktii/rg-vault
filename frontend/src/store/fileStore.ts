@@ -39,7 +39,6 @@ export const useFileStore = create<FileState>((set, get) => ({
       if (type) params.append('type', type);
 
       const response = await api.get(`/files?${params.toString()}`);
-      console.log('Files API response:', response.data); // Debug log
 
       const filesData = response.data.data || response.data;
       set({
@@ -59,7 +58,6 @@ export const useFileStore = create<FileState>((set, get) => ({
   uploadFile: async (file, category) => {
     set({ isUploading: true, error: null });
     try {
-      console.log('Uploading file:', file.name, 'Category:', category); // Debug log
 
       const formData = new FormData();
       formData.append('file', file);
@@ -71,7 +69,6 @@ export const useFileStore = create<FileState>((set, get) => ({
         },
       });
 
-      console.log('Upload file response:', response.data); // Debug log
 
       const newFile = response.data;
       set({
@@ -87,7 +84,6 @@ export const useFileStore = create<FileState>((set, get) => ({
 
   deleteFile: async (id) => {
     try {
-      console.log('Deleting file:', id); // Debug log
       await api.delete(`/files/${id}`);
       set({
         files: get().files.filter((file) => file.id !== id),
