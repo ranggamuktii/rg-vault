@@ -1,8 +1,10 @@
 'use client';
 
+import type React from 'react';
+
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useAuthStore } from '../store/authStore';
 
@@ -16,7 +18,7 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const { login } = useAuthStore();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -47,7 +49,7 @@ const Login: React.FC = () => {
 
       await login(data.email, data.password);
       toast.success('Login successful!');
-      router.push('/dashboard'); // Updated from navigate to router.push for Next.js
+      navigate('/dashboard');
     } catch (error: unknown) {
       if (
         error &&

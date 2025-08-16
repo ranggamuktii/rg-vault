@@ -1,8 +1,7 @@
 'use client';
 
 import type React from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { HomeIcon, DocumentTextIcon, LinkIcon, FolderIcon, XMarkIcon, CommandLineIcon, MagnifyingGlassIcon, StarIcon, ClockIcon, UserCircleIcon, Bars3Icon } from '@heroicons/react/24/outline';
 import { clsx } from 'clsx';
 import { useNoteStore } from '../../store/noteStore';
@@ -25,8 +24,8 @@ const navigation = [
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
-  const pathname = usePathname();
-  const router = useRouter();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { createNote } = useNoteStore();
   const { user, logout } = useAuthStore();
 
@@ -87,7 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
       await Promise.resolve(logout());
     } finally {
       setShowUserMenu(false);
-      router.push('/login');
+      navigate('/login');
     }
   };
 
@@ -115,7 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
       <div className={clsx('fixed inset-y-0 left-0 z-50 w-72 sm:w-80 transform lg:translate-x-0 lg:static lg:inset-0', 'transition-transform duration-300 ease-[cubic-bezier(.22,1,.36,1)]', isOpen ? 'translate-x-0' : '-translate-x-full')}>
         <div className="h-full max-h-screen border-r bg-white/80 backdrop-blur-xl border-white/20 flex flex-col overflow-hidden">
           <div className="flex items-center justify-between h-16 px-6 border-b border-white/20 flex-shrink-0">
-            <Link href="/dashboard" className="flex items-center group">
+            <Link to="/dashboard" className="flex items-center group">
               <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 shadow-md flex items-center justify-center mr-3 transition-transform group-hover:rotate-6">
                 <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path
@@ -152,11 +151,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
           <nav className="px-4 flex-1 py-4 overflow-y-auto">
             <ul className="space-y-1.5">
               {navigation.map((item) => {
-                const isActive = pathname === item.href;
+                const isActive = location.pathname === item.href;
                 return (
                   <li key={item.name}>
                     <Link
-                      href={item.href}
+                      to={item.href}
                       onClick={onClose}
                       className={clsx(
                         'group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all',
@@ -187,7 +186,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
               </div>
             </button>
 
-            <button onClick={() => router.push('/search')} className="flex items-center gap-3 w-full p-3 rounded-xl bg-gradient-to-r from-blue-50 to-blue-50 hover:from-blue-100 hover:to-blue-100 transition-all ring-1 ring-blue-200/50">
+            <button onClick={() => navigate('/search')} className="flex items-center gap-3 w-full p-3 rounded-xl bg-gradient-to-r from-blue-50 to-blue-50 hover:from-blue-100 hover:to-blue-100 transition-all ring-1 ring-blue-200/50">
               <div className="p-2 bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg shadow-sm">
                 <MagnifyingGlassIcon className="h-4 w-4 text-white" />
               </div>
@@ -237,8 +236,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
               >
                 <UserCircleIcon className="h-8 w-8 text-slate-400 group-hover:text-slate-600 transition-colors" />
                 <div className="text-left flex-1">
-                  <p className="text-sm font-medium text-slate-900">{user?.name || 'User'}</p>
-                  <p className="text-xs text-slate-500">{user?.email || 'user@rgvault.com'}</p>
+                  <p className="text-sm font-semibold text-slate-900 truncate">{user?.name || 'User'}</p>
+                  <p className="text-xs text-slate-500 truncate">{user?.email || 'user@rgvault.com'}</p>
                 </div>
               </button>
 
@@ -256,7 +255,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
                     <p className="text-xs text-slate-500 truncate">{user?.email}</p>
                   </div>
 
-                  <Link href="/profile" role="menuitem" className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors" onClick={() => setShowUserMenu(false)}>
+                  <Link to="/profile" role="menuitem" className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors" onClick={() => setShowUserMenu(false)}>
                     Profile Settings
                   </Link>
 
