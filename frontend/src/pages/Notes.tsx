@@ -159,7 +159,7 @@ const Notes: React.FC = () => {
     <MainLayout>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
         <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-          <div className={`transition-all duration-700 ease-out ${panelOpen ? 'lg:grid lg:grid-cols-[1fr_600px] gap-12' : 'lg:grid-cols-[1fr_0px]'}`}>
+          <div className={`transition-all duration-700 ease-out ${panelOpen ? 'lg:grid lg:grid-cols-[1fr_800px] gap-12' : 'lg:grid-cols-[1fr_0px]'}`}>
             {/* LEFT: Notes List */}
             <div className="space-y-10 min-w-0">
               <div className="relative">
@@ -315,7 +315,7 @@ const Notes: React.FC = () => {
 
             <aside
               className={`
-                fixed top-0 right-0 z-40 w-[600px] h-screen
+                fixed top-0 right-0 z-40 w-[800px] h-screen
                 bg-white/95 backdrop-blur-xl border-l border-slate-200/60 shadow-2xl shadow-slate-900/10
                 transition-all duration-700 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
                 ${panelOpen ? 'translate-x-0' : 'translate-x-full'}
