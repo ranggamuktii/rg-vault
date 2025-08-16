@@ -136,323 +136,327 @@ const Notes: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 transition-all duration-700 ease-out ${panelOpen ? 'lg:grid lg:grid-cols-[1fr_480px] gap-12' : 'lg:grid-cols-[1fr_0px]'}`}>
-        {/* LEFT: Notes List */}
-        <div className="space-y-10 min-w-0">
-          <div className="relative">
-            <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-2xl"></div>
-            <div className="relative">
-              <div className="flex items-center gap-3 mb-3">
-                <SparklesIcon className="w-8 h-8 text-blue-600" />
-                <h1 className="text-4xl font-bold text-slate-900 font-serif">Notes</h1>
-              </div>
-              <p className="text-lg text-slate-600 leading-relaxed">Capture and organize your thoughts in your personal knowledge vault</p>
-            </div>
-          </div>
-
-          <div className="relative max-w-lg">
-            <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-              <MagnifyingGlassIcon className="h-5 w-5 text-slate-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search your notes..."
-              aria-label="Search notes"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-14 pr-6 py-4 bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-3xl
-                         focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300
-                         shadow-sm shadow-slate-900/5 transition-all duration-200
-                         placeholder:text-slate-400 text-slate-700"
-            />
-          </div>
-
-          {/* Notes Grid */}
-          {isLoading ? (
-            <div className="flex items-center justify-center py-20">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
+        <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+          <div className={`transition-all duration-700 ease-out ${panelOpen ? 'lg:grid lg:grid-cols-[1fr_480px] gap-12' : 'lg:grid-cols-[1fr_0px]'}`}>
+            {/* LEFT: Notes List */}
+            <div className="space-y-10 min-w-0">
               <div className="relative">
-                <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-200"></div>
-                <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-600 border-t-transparent absolute top-0"></div>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-              <div
-                role="button"
-                tabIndex={0}
-                aria-label="Add a new note"
-                onClick={() => openEditor()}
-                onKeyDown={(e) => (e.key === 'Enter' ? openEditor() : null)}
-                className={`
-                  group relative bg-white/60 backdrop-blur-sm rounded-3xl border-2 border-dashed border-slate-300/60
-                  flex flex-col items-center justify-center text-slate-500 min-h-[280px]
-                  transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
-                  hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-300 hover:text-blue-600
-                  hover:bg-gradient-to-br hover:from-blue-50/80 hover:to-indigo-50/80
-                  cursor-pointer animate-fadeIn shadow-sm hover:shadow-xl hover:shadow-blue-500/10
-                  ${panelOpen ? 'md:col-span-2 xl:col-span-3 p-8' : 'p-8'}
-                `}
-                style={{ animationDelay: `0ms` }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <PlusIcon className="h-8 w-8 text-blue-600" />
+                <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-2xl"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-3 mb-3">
+                    <SparklesIcon className="w-8 h-8 text-blue-600" />
+                    <h1 className="text-4xl font-bold text-slate-900 font-serif">Notes</h1>
                   </div>
-                  <span className="font-semibold text-lg">Create New Note</span>
-                  <span className="text-sm text-slate-400 mt-1">Start capturing your ideas</span>
+                  <p className="text-lg text-slate-600 leading-relaxed">Capture and organize your thoughts in your personal knowledge vault</p>
                 </div>
               </div>
 
-              {notes.map((note, idx) => (
-                <div
-                  key={note.id}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Open note titled ${note.title}`}
-                  onClick={() => onCardClick(note)}
-                  onKeyDown={(e) => (e.key === 'Enter' ? onCardClick(note) : null)}
-                  className={`
-                    group relative bg-white/80 backdrop-blur-sm rounded-3xl border border-slate-200/60
-                    transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
-                    hover:-translate-y-2 hover:scale-[1.02] hover:shadow-xl hover:shadow-slate-900/10
-                    hover:border-slate-300/80 cursor-pointer animate-fadeIn min-h-[280px]
-                    ${panelOpen ? 'md:col-span-2 xl:col-span-3 p-8' : 'p-8'}
-                  `}
-                  style={{ animationDelay: `${(idx + 1) * 80}ms` }}
-                >
-                  {/* Action Buttons */}
-                  <div className="absolute top-6 right-6 flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                    <button
-                      type="button"
-                      title="Edit note"
-                      aria-label="Edit note"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openEditor(note);
-                      }}
-                      className="p-2.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm"
+              <div className="relative max-w-lg">
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                  <MagnifyingGlassIcon className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search your notes..."
+                  aria-label="Search notes"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="block w-full pl-14 pr-6 py-4 bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-3xl
+                             focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300
+                             shadow-sm shadow-slate-900/5 transition-all duration-200
+                             placeholder:text-slate-400 text-slate-700"
+                />
+              </div>
+
+              {/* Notes Grid */}
+              {isLoading ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="relative">
+                    <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-200"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-600 border-t-transparent absolute top-0"></div>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Add a new note"
+                    onClick={() => openEditor()}
+                    onKeyDown={(e) => (e.key === 'Enter' ? openEditor() : null)}
+                    className={`
+                      group relative bg-white/60 backdrop-blur-sm rounded-3xl border-2 border-dashed border-slate-300/60
+                      flex flex-col items-center justify-center text-slate-500 min-h-[280px]
+                      transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
+                      hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-300 hover:text-blue-600
+                      hover:bg-gradient-to-br hover:from-blue-50/80 hover:to-indigo-50/80
+                      cursor-pointer animate-fadeIn shadow-sm hover:shadow-xl hover:shadow-blue-500/10
+                      ${panelOpen ? 'md:col-span-2 xl:col-span-3 p-8' : 'p-8'}
+                    `}
+                    style={{ animationDelay: `0ms` }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="relative z-10 flex flex-col items-center">
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <PlusIcon className="h-8 w-8 text-blue-600" />
+                      </div>
+                      <span className="font-semibold text-lg">Create New Note</span>
+                      <span className="text-sm text-slate-400 mt-1">Start capturing your ideas</span>
+                    </div>
+                  </div>
+
+                  {notes.map((note, idx) => (
+                    <div
+                      key={note.id}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Open note titled ${note.title}`}
+                      onClick={() => onCardClick(note)}
+                      onKeyDown={(e) => (e.key === 'Enter' ? onCardClick(note) : null)}
+                      className={`
+                        group relative bg-white/80 backdrop-blur-sm rounded-3xl border border-slate-200/60
+                        transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
+                        hover:-translate-y-2 hover:scale-[1.02] hover:shadow-xl hover:shadow-slate-900/10
+                        hover:border-slate-300/80 cursor-pointer animate-fadeIn min-h-[280px]
+                        ${panelOpen ? 'md:col-span-2 xl:col-span-3 p-8' : 'p-8'}
+                      `}
+                      style={{ animationDelay: `${(idx + 1) * 80}ms` }}
                     >
-                      <PencilIcon className="h-4 w-4" />
-                    </button>
-                    <button
-                      type="button"
-                      title="Delete note"
-                      aria-label="Delete note"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(note.id);
-                      }}
-                      className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm"
-                    >
-                      <TrashIcon className="h-4 w-4" />
+                      {/* Action Buttons */}
+                      <div className="absolute top-6 right-6 flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                        <button
+                          type="button"
+                          title="Edit note"
+                          aria-label="Edit note"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openEditor(note);
+                          }}
+                          className="p-2.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm"
+                        >
+                          <PencilIcon className="h-4 w-4" />
+                        </button>
+                        <button
+                          type="button"
+                          title="Delete note"
+                          aria-label="Delete note"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(note.id);
+                          }}
+                          className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </button>
+                      </div>
+
+                      <div className="flex flex-col h-full">
+                        {/* Title */}
+                        <h3 className="text-xl font-bold text-slate-900 mb-4 pr-20 leading-tight font-serif line-clamp-2">{note.title}</h3>
+
+                        {/* Content Preview */}
+                        <p className="text-slate-600 text-base mb-6 line-clamp-4 leading-relaxed flex-1">
+                          {note.content.substring(0, 180)}
+                          {note.content.length > 180 && '...'}
+                        </p>
+
+                        {/* Tags */}
+                        {note.tags?.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mb-6">
+                            {note.tags.slice(0, 3).map((tag, index) => (
+                              <span key={index} className={`inline-flex items-center px-3 py-1.5 rounded-2xl text-xs font-medium border ${getTagColor(index)}`}>
+                                {tag}
+                              </span>
+                            ))}
+                            {note.tags.length > 3 && <span className="inline-flex items-center px-3 py-1.5 rounded-2xl text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">+{note.tags.length - 3} more</span>}
+                          </div>
+                        )}
+
+                        {/* Date */}
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                          <div className="text-sm text-slate-500 flex items-center gap-2">
+                            <BookmarkIcon className="w-4 h-4" />
+                            {new Date(note.created_at).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                            })}
+                          </div>
+                          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <aside
+              className={`
+                fixed top-0 right-0 z-40 w-[480px] h-screen
+                bg-white/95 backdrop-blur-xl border-l border-slate-200/60 shadow-2xl shadow-slate-900/10
+                transition-all duration-700 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
+                ${panelOpen ? 'translate-x-0' : 'translate-x-full'}
+                overflow-y-auto custom-scrollbar
+              `}
+            >
+              {isEditorOpen && (
+                <div className="p-8 animate-slideIn">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-8">
+                    <div>
+                      <h3 className="text-2xl font-bold text-slate-900 font-serif">{editingNote ? 'Edit Note' : 'Create New Note'}</h3>
+                      <p className="text-slate-500 mt-1">{editingNote ? 'Update your thoughts' : 'Capture your ideas'}</p>
+                    </div>
+                    <button type="button" onClick={closePanel} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Close editor" aria-label="Close editor">
+                      <XMarkIcon className="w-6 h-6 text-slate-400" />
                     </button>
                   </div>
 
-                  <div className="flex flex-col h-full">
-                    {/* Title */}
-                    <h3 className="text-xl font-bold text-slate-900 mb-4 pr-20 leading-tight font-serif line-clamp-2">{note.title}</h3>
+                  {/* Form */}
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                    <div>
+                      <label htmlFor="title" className="block text-sm font-semibold text-slate-700 mb-3">
+                        Title
+                      </label>
+                      <input
+                        id="title"
+                        placeholder="Enter a compelling title..."
+                        {...register('title', { required: 'Title is required' })}
+                        className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
+                                   focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
+                                   transition-all duration-200 text-slate-900 placeholder:text-slate-400"
+                      />
+                      {errors.title && <p className="mt-2 text-sm text-red-600 flex items-center gap-1">{errors.title.message}</p>}
+                    </div>
 
-                    {/* Content Preview */}
-                    <p className="text-slate-600 text-base mb-6 line-clamp-4 leading-relaxed flex-1">
-                      {note.content.substring(0, 180)}
-                      {note.content.length > 180 && '...'}
-                    </p>
+                    <div>
+                      <label htmlFor="content" className="block text-sm font-semibold text-slate-700 mb-3">
+                        Content
+                      </label>
+                      <textarea
+                        id="content"
+                        placeholder="Start writing your thoughts..."
+                        {...register('content', { required: 'Content is required' })}
+                        rows={12}
+                        className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
+                                   focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
+                                   transition-all duration-200 text-slate-900 placeholder:text-slate-400 resize-none"
+                      />
+                      {errors.content && <p className="mt-2 text-sm text-red-600">{errors.content.message}</p>}
+                    </div>
 
-                    {/* Tags */}
-                    {note.tags?.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {note.tags.slice(0, 3).map((tag, index) => (
-                          <span key={index} className={`inline-flex items-center px-3 py-1.5 rounded-2xl text-xs font-medium border ${getTagColor(index)}`}>
-                            {tag}
-                          </span>
-                        ))}
-                        {note.tags.length > 3 && <span className="inline-flex items-center px-3 py-1.5 rounded-2xl text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">+{note.tags.length - 3} more</span>}
-                      </div>
-                    )}
+                    <div>
+                      <label htmlFor="tags" className="block text-sm font-semibold text-slate-700 mb-3">
+                        Tags
+                      </label>
+                      <input
+                        id="tags"
+                        placeholder="Add tags separated by commas..."
+                        {...register('tags')}
+                        className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
+                                   focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
+                                   transition-all duration-200 text-slate-900 placeholder:text-slate-400"
+                      />
+                    </div>
 
-                    {/* Date */}
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                    {/* Action Buttons */}
+                    <div className="flex justify-end gap-4 pt-6 border-t border-slate-100">
+                      <button type="button" onClick={closePanel} className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-medium transition-colors">
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 
+                                   text-white rounded-2xl font-medium shadow-lg shadow-blue-500/25 transition-all duration-200 
+                                   hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5"
+                      >
+                        {editingNote ? 'Update Note' : 'Create Note'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              {isPreviewOpen && selectedNote && (
+                <div className="p-8 animate-slideIn">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="flex gap-3">
+                      <button type="button" onClick={goPrev} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Previous note" aria-label="Previous note">
+                        <ChevronLeftIcon className="w-5 h-5 text-slate-600" />
+                      </button>
+                      <button type="button" onClick={goNext} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Next note" aria-label="Next note">
+                        <ChevronRightIcon className="w-5 h-5 text-slate-600" />
+                      </button>
+                    </div>
+                    <button type="button" onClick={closePanel} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Close preview" aria-label="Close preview">
+                      <XMarkIcon className="w-6 h-6 text-slate-400" />
+                    </button>
+                  </div>
+
+                  {/* Content */}
+                  <div className="space-y-6">
+                    <div>
+                      <h2 className="text-3xl font-bold text-slate-900 mb-3 leading-tight font-serif">{selectedNote.title}</h2>
                       <div className="text-sm text-slate-500 flex items-center gap-2">
                         <BookmarkIcon className="w-4 h-4" />
-                        {new Date(note.created_at).toLocaleDateString('en-US', {
+                        {new Date(selectedNote.created_at).toLocaleString('en-US', {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
                         })}
                       </div>
-                      <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>
+                    </div>
+
+                    {/* Tags */}
+                    {selectedNote.tags?.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {selectedNote.tags.map((tag, i) => (
+                          <span key={i} className={`inline-flex items-center px-4 py-2 rounded-2xl text-sm font-medium border ${getTagColor(i)}`}>
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Content */}
+                    <article className="prose prose-slate max-w-none text-slate-700 leading-relaxed whitespace-pre-wrap text-base">{selectedNote.content}</article>
+
+                    {/* Actions */}
+                    <div className="flex gap-3 pt-8 border-t border-slate-100">
+                      <button
+                        type="button"
+                        onClick={() => openEditor(selectedNote)}
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-blue-50 text-blue-700 hover:bg-blue-100 
+                                   transition-colors font-medium"
+                        title="Edit note"
+                        aria-label="Edit note"
+                      >
+                        <PencilIcon className="w-4 h-4" />
+                        Edit Note
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(selectedNote.id)}
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-red-50 text-red-700 hover:bg-red-100 
+                                   transition-colors font-medium"
+                        title="Delete note"
+                        aria-label="Delete note"
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                        Delete
+                      </button>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              )}
+            </aside>
+          </div>
         </div>
-
-        <aside
-          className={`
-            fixed top-0 right-0 z-40 w-[480px] h-screen
-            bg-white/95 backdrop-blur-xl border-l border-slate-200/60 shadow-2xl shadow-slate-900/10
-            transition-all duration-700 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
-            ${panelOpen ? 'translate-x-0' : 'translate-x-full'}
-            overflow-y-auto custom-scrollbar
-          `}
-        >
-          {isEditorOpen && (
-            <div className="p-8 animate-slideIn">
-              {/* Header */}
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h3 className="text-2xl font-bold text-slate-900 font-serif">{editingNote ? 'Edit Note' : 'Create New Note'}</h3>
-                  <p className="text-slate-500 mt-1">{editingNote ? 'Update your thoughts' : 'Capture your ideas'}</p>
-                </div>
-                <button type="button" onClick={closePanel} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Close editor" aria-label="Close editor">
-                  <XMarkIcon className="w-6 h-6 text-slate-400" />
-                </button>
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                <div>
-                  <label htmlFor="title" className="block text-sm font-semibold text-slate-700 mb-3">
-                    Title
-                  </label>
-                  <input
-                    id="title"
-                    placeholder="Enter a compelling title..."
-                    {...register('title', { required: 'Title is required' })}
-                    className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
-                               focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
-                               transition-all duration-200 text-slate-900 placeholder:text-slate-400"
-                  />
-                  {errors.title && <p className="mt-2 text-sm text-red-600 flex items-center gap-1">{errors.title.message}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="content" className="block text-sm font-semibold text-slate-700 mb-3">
-                    Content
-                  </label>
-                  <textarea
-                    id="content"
-                    placeholder="Start writing your thoughts..."
-                    {...register('content', { required: 'Content is required' })}
-                    rows={12}
-                    className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
-                               focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
-                               transition-all duration-200 text-slate-900 placeholder:text-slate-400 resize-none"
-                  />
-                  {errors.content && <p className="mt-2 text-sm text-red-600">{errors.content.message}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="tags" className="block text-sm font-semibold text-slate-700 mb-3">
-                    Tags
-                  </label>
-                  <input
-                    id="tags"
-                    placeholder="Add tags separated by commas..."
-                    {...register('tags')}
-                    className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
-                               focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
-                               transition-all duration-200 text-slate-900 placeholder:text-slate-400"
-                  />
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-4 pt-6 border-t border-slate-100">
-                  <button type="button" onClick={closePanel} className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-medium transition-colors">
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 
-                               text-white rounded-2xl font-medium shadow-lg shadow-blue-500/25 transition-all duration-200 
-                               hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5"
-                  >
-                    {editingNote ? 'Update Note' : 'Create Note'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
-
-          {isPreviewOpen && selectedNote && (
-            <div className="p-8 animate-slideIn">
-              {/* Header */}
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex gap-3">
-                  <button type="button" onClick={goPrev} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Previous note" aria-label="Previous note">
-                    <ChevronLeftIcon className="w-5 h-5 text-slate-600" />
-                  </button>
-                  <button type="button" onClick={goNext} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Next note" aria-label="Next note">
-                    <ChevronRightIcon className="w-5 h-5 text-slate-600" />
-                  </button>
-                </div>
-                <button type="button" onClick={closePanel} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Close preview" aria-label="Close preview">
-                  <XMarkIcon className="w-6 h-6 text-slate-400" />
-                </button>
-              </div>
-
-              {/* Content */}
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-3xl font-bold text-slate-900 mb-3 leading-tight font-serif">{selectedNote.title}</h2>
-                  <div className="text-sm text-slate-500 flex items-center gap-2">
-                    <BookmarkIcon className="w-4 h-4" />
-                    {new Date(selectedNote.created_at).toLocaleString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </div>
-                </div>
-
-                {/* Tags */}
-                {selectedNote.tags?.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {selectedNote.tags.map((tag, i) => (
-                      <span key={i} className={`inline-flex items-center px-4 py-2 rounded-2xl text-sm font-medium border ${getTagColor(i)}`}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Content */}
-                <article className="prose prose-slate max-w-none text-slate-700 leading-relaxed whitespace-pre-wrap text-base">{selectedNote.content}</article>
-
-                {/* Actions */}
-                <div className="flex gap-3 pt-8 border-t border-slate-100">
-                  <button
-                    type="button"
-                    onClick={() => openEditor(selectedNote)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-blue-50 text-blue-700 hover:bg-blue-100 
-                               transition-colors font-medium"
-                    title="Edit note"
-                    aria-label="Edit note"
-                  >
-                    <PencilIcon className="w-4 h-4" />
-                    Edit Note
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(selectedNote.id)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-red-50 text-red-700 hover:bg-red-100 
-                               transition-colors font-medium"
-                    title="Delete note"
-                    aria-label="Delete note"
-                  >
-                    <TrashIcon className="w-4 h-4" />
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </aside>
       </div>
     </MainLayout>
   );

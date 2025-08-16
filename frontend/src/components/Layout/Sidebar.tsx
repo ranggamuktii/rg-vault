@@ -148,7 +148,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
           </div>
 
           {/* Navigation */}
-          <nav className="px-4 flex-1 py-4 overflow-y-auto">
+          <nav className="px-4 flex-1 py-4">
             <ul className="space-y-1.5">
               {navigation.map((item) => {
                 const isActive = location.pathname === item.href;
