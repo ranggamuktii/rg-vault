@@ -5,8 +5,8 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import JoditEditor from 'jodit-react';
-import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon, SparklesIcon, BookmarkIcon, StarIcon, Bars3Icon } from '@heroicons/react/24/outline';
-import { StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
+import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon, SparklesIcon, BookmarkIcon, MapPinIcon, Bars3Icon } from '@heroicons/react/24/outline';
+import { MapPinIcon as MapPinSolidIcon } from '@heroicons/react/24/solid';
 import MainLayout from '../components/Layout/MainLayout';
 import { useNoteStore } from '../store/noteStore';
 import type { Note } from '../types';
@@ -26,6 +26,7 @@ const Notes: React.FC = () => {
   const [editorContent, setEditorContent] = useState('');
   const [pinnedNotes, setPinnedNotes] = useState<Set<number>>(new Set());
   const [draggedNote, setDraggedNote] = useState<number | null>(null);
+  const [dragOverNote, setDragOverNote] = useState<number | null>(null);
   const [noteOrder, setNoteOrder] = useState<number[]>([]);
 
   const { notes, isLoading, fetchNotes, createNote, updateNote, deleteNote } = useNoteStore();
@@ -170,6 +171,9 @@ const Notes: React.FC = () => {
   const handleDragStart = (e: React.DragEvent, noteId: number) => {
     setDraggedNote(noteId);
     e.dataTransfer.effectAllowed = 'move';
+    const dragImage = e.currentTarget.cloneNode(true) as HTMLElement;
+    dragImage.style.opacity = '0.8';
+    e.dataTransfer.setDragImage(dragImage, 0, 0);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -177,15 +181,29 @@ const Notes: React.FC = () => {
     e.dataTransfer.dropEffect = 'move';
   };
 
+  const handleDragEnter = (e: React.DragEvent, noteId: number) => {
+    e.preventDefault();
+    if (draggedNote && draggedNote !== noteId) {
+      setDragOverNote(noteId);
+    }
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setDragOverNote(null);
+    }
+  };
+
   const handleDrop = (e: React.DragEvent, targetNoteId: number) => {
     e.preventDefault();
+    setDragOverNote(null);
     if (draggedNote && draggedNote !== targetNoteId) {
       setNoteOrder((prevOrder) => {
         const newOrder = [...prevOrder];
         const draggedIndex = newOrder.indexOf(draggedNote);
         const targetIndex = newOrder.indexOf(targetNoteId);
 
-        // Remove dragged item and insert at target position
         newOrder.splice(draggedIndex, 1);
         newOrder.splice(targetIndex, 0, draggedNote);
 
@@ -198,6 +216,7 @@ const Notes: React.FC = () => {
 
   const handleDragEnd = () => {
     setDraggedNote(null);
+    setDragOverNote(null);
   };
 
   const sortedNotes = useMemo(() => {
@@ -306,6 +325,8 @@ const Notes: React.FC = () => {
                       draggable
                       onDragStart={(e) => handleDragStart(e, note.id)}
                       onDragOver={handleDragOver}
+                      onDragEnter={(e) => handleDragEnter(e, note.id)}
+                      onDragLeave={handleDragLeave}
                       onDrop={(e) => handleDrop(e, note.id)}
                       onDragEnd={handleDragEnd}
                       onClick={() => onCardClick(note)}
@@ -314,15 +335,16 @@ const Notes: React.FC = () => {
                         group relative bg-white/80 backdrop-blur-sm border border-slate-200/60
                         transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
                         hover:-translate-y-2 hover:scale-[1.02] hover:shadow-xl hover:shadow-slate-900/10
-                        hover:border-slate-300/80 cursor-pointer animate-fadeIn
-                        ${draggedNote === note.id ? 'opacity-50 scale-95' : ''}
+                        hover:border-slate-300/80 animate-fadeIn
+                        ${draggedNote === note.id ? 'opacity-30 scale-95 cursor-grabbing' : 'cursor-grab hover:cursor-grab'} 
+                        ${dragOverNote === note.id ? 'ring-2 ring-blue-400 bg-blue-50/50 border-blue-300' : ''}
                         ${pinnedNotes.has(note.id) ? 'ring-2 ring-amber-200 bg-gradient-to-br from-amber-50/50 to-yellow-50/50' : ''}
                         ${panelOpen ? 'p-4 flex items-center gap-4 min-h-[100px] rounded-2xl' : 'p-8 min-h-[280px] rounded-3xl'}
                       `}
                       style={{ animationDelay: `${(idx + 1) * 80}ms` }}
                     >
                       {panelOpen && (
-                        <div className="flex-shrink-0 p-2 text-slate-400 hover:text-slate-600 cursor-grab active:cursor-grabbing rounded-lg hover:bg-slate-100 transition-colors">
+                        <div className="flex-shrink-0 p-2 text-slate-400 hover:text-slate-600 cursor-grab active:cursor-grabbing rounded-lg hover:bg-slate-100 transition-all duration-200 hover:scale-110">
                           <Bars3Icon className="w-5 h-5" />
                         </div>
                       )}
@@ -333,11 +355,11 @@ const Notes: React.FC = () => {
                           title={pinnedNotes.has(note.id) ? 'Unpin note' : 'Pin note'}
                           aria-label={pinnedNotes.has(note.id) ? 'Unpin note' : 'Pin note'}
                           onClick={(e) => togglePin(note.id, e)}
-                          className={`p-2 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm ${
+                          className={`rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm hover:scale-110 ${
                             pinnedNotes.has(note.id) ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'
                           } ${panelOpen ? 'p-1.5' : 'p-2'}`}
                         >
-                          {pinnedNotes.has(note.id) ? <StarSolidIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} /> : <StarIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} />}
+                          {pinnedNotes.has(note.id) ? <MapPinSolidIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} /> : <MapPinIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} />}
                         </button>
                         <button
                           type="button"
@@ -347,7 +369,7 @@ const Notes: React.FC = () => {
                             e.stopPropagation();
                             openEditor(note);
                           }}
-                          className={`text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm ${panelOpen ? 'p-1.5' : 'p-2'}`}
+                          className={`text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm hover:scale-110 ${panelOpen ? 'p-1.5' : 'p-2'}`}
                         >
                           <PencilIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
                         </button>
@@ -359,7 +381,7 @@ const Notes: React.FC = () => {
                             e.stopPropagation();
                             handleDelete(note.id);
                           }}
-                          className={`text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm ${panelOpen ? 'p-1.5' : 'p-2'}`}
+                          className={`text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm hover:scale-110 ${panelOpen ? 'p-1.5' : 'p-2'}`}
                         >
                           <TrashIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
                         </button>
@@ -368,7 +390,7 @@ const Notes: React.FC = () => {
                       <div className={`flex h-full ${panelOpen ? 'flex-row items-center gap-4 flex-1' : 'flex-col'}`}>
                         {panelOpen && pinnedNotes.has(note.id) && (
                           <div className="flex-shrink-0">
-                            <StarSolidIcon className="w-4 h-4 text-amber-500" />
+                            <MapPinSolidIcon className="w-4 h-4 text-amber-500" />
                           </div>
                         )}
 
