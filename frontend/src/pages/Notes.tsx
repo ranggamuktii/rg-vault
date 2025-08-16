@@ -136,7 +136,7 @@ const Notes: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className={`transition-all duration-700 ease-out ${panelOpen ? 'lg:grid lg:grid-cols-[1fr_480px] gap-12' : 'lg:grid-cols-[1fr_0px]'}`}>
+      <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 transition-all duration-700 ease-out ${panelOpen ? 'lg:grid lg:grid-cols-[1fr_480px] gap-12' : 'lg:grid-cols-[1fr_0px]'}`}>
         {/* LEFT: Notes List */}
         <div className="space-y-10 min-w-0">
           <div className="relative">

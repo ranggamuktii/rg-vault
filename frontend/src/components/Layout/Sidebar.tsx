@@ -186,16 +186,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onMenuClick }) => {
               </div>
             </button>
 
-            <button onClick={() => navigate('/search')} className="flex items-center gap-3 w-full p-3 rounded-xl bg-gradient-to-r from-blue-50 to-blue-50 hover:from-blue-100 hover:to-blue-100 transition-all ring-1 ring-blue-200/50">
-              <div className="p-2 bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg shadow-sm">
-                <MagnifyingGlassIcon className="h-4 w-4 text-white" />
-              </div>
-              <div className="text-left">
-                <p className="text-sm font-medium text-gray-900">Search All</p>
-                <p className="text-xs text-gray-500">Find anything</p>
-              </div>
-            </button>
-
             <button
               onClick={() => toast.success('Coming soon!')}
               className="flex items-center gap-3 w-full p-3 rounded-xl bg-gradient-to-r from-pink-50 to-rose-50 hover:from-pink-100 hover:to-rose-100 transition-all ring-1 ring-pink-200/50"
