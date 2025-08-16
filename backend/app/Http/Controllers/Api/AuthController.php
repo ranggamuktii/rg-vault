@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
     /**
-     * Register user baru & langsung beri token JWT (via HttpOnly cookie)
+     * Register user baru
      */
     public function register(Request $request)
     {
@@ -33,11 +33,11 @@ class AuthController extends Controller
 
         $token = auth('api')->login($user);
 
-        return $this->respondWithTokenCookie($token, $user);
+        return $this->respondWithToken($token, $user);
     }
 
     /**
-     * Login user (set JWT di HttpOnly cookie)
+     * Login user
      */
     public function login(Request $request)
     {
@@ -58,7 +58,7 @@ class AuthController extends Controller
 
         $user = auth('api')->user();
 
-        return $this->respondWithTokenCookie($token, $user);
+        return $this->respondWithToken($token, $user);
     }
 
     /**
@@ -70,12 +70,11 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
-        // FE kamu expect { user: ... }
         return response()->json(['user' => $user]);
     }
 
     /**
-     * Logout user (invalidate token + hapus cookie)
+     * Logout user
      */
     public function logout()
     {
@@ -89,64 +88,59 @@ class AuthController extends Controller
             ->cookie(
                 'access_token',
                 '',
-                -1, // delete
+                -1,
                 '/',
                 config('session.domain'),
                 $this->cookieSecure(),
-                true,      // HttpOnly
+                true,
                 false,
                 $this->cookieSameSite()
             );
     }
 
     /**
-     * Refresh token JWT (set cookie baru)
+     * Refresh token JWT
      */
     public function refresh()
     {
-        $new = auth('api')->refresh(); // ambil dari Authorization yg diisi jwt.cookie
+        $new = auth('api')->refresh();
         $user = auth('api')->setToken($new)->user();
 
-        return $this->respondWithTokenCookie($new, $user);
+        return $this->respondWithToken($new, $user);
     }
-
 
     /**
      * Helper: balas JSON + set cookie JWT HttpOnly
      */
-    protected function respondWithTokenCookie(string $token, $user)
-{
-    $ttlMinutes = auth('api')->factory()->getTTL(); // menit
+    protected function respondWithToken(string $token, $user)
+    {
+        $ttlMinutes = auth('api')->factory()->getTTL();
 
-    return response()->json([
-        'access_token' => $token,
-        'token_type'   => 'bearer',
-        'expires_in'   => $ttlMinutes * 60,
-        'user'         => $user,
-    ])->cookie(
-        'access_token',
-        $token,
-        $ttlMinutes,
-        '/',
-        config('session.domain'),  
-        $this->cookieSecure(),
-        true,
-        false,
-        $this->cookieSameSite()
-    );
-}
-
+        return response()->json([
+            'access_token' => $token,        // ✅ sekarang dikirim
+            'token_type'   => 'bearer',
+            'expires_in'   => $ttlMinutes * 60,
+            'user'         => $user,
+        ])->cookie(
+            'access_token',
+            $token,
+            $ttlMinutes,                 // menit
+            '/',
+            config('session.domain'),    // mis. ".ranggamukti.my.id"
+            $this->cookieSecure(),
+            true,                        // HttpOnly
+            false,
+            $this->cookieSameSite()
+        );
+    }
 
     protected function cookieSecure(): bool
     {
-        // Wajib true di production (HTTPS)
         return app()->environment('production');
     }
 
     protected function cookieSameSite(): string
     {
-        // Kalau FE beda domain & cross-site, pakai 'None' (HARUS HTTPS).
-        // Kalau satu domain/subdomain, 'Lax' umumnya cukup.
         $val = config('session.same_site', 'lax');
         $val = strtolower($val);
         return $val === 'none' ? 'None' : 'Lax';
