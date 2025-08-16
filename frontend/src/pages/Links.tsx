@@ -225,21 +225,6 @@ const Links: React.FC = () => {
             ))}
           </div>
         )}
-
-        {/* Empty state */}
-        {!isLoading && links.length === 0 && (
-          <div className="text-center py-16">
-            <div className="mx-auto h-16 w-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-4">
-              <PlusIcon className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No links yet</h3>
-            <p className="text-gray-600 mb-6">Save your first bookmark to get started</p>
-            <button onClick={() => openModal()} aria-label="Add your first link" className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-medium">
-              <PlusIcon className="h-5 w-5 mr-2" />
-              Add your first link
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Modal Create/Edit Link */}
