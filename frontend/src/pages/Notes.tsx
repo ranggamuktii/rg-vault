@@ -5,7 +5,8 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import JoditEditor from 'jodit-react';
-import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon, SparklesIcon, BookmarkIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon, SparklesIcon, BookmarkIcon, StarIcon, Bars3Icon } from '@heroicons/react/24/outline';
+import { StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
 import MainLayout from '../components/Layout/MainLayout';
 import { useNoteStore } from '../store/noteStore';
 import type { Note } from '../types';
@@ -23,6 +24,8 @@ const Notes: React.FC = () => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
   const [editorContent, setEditorContent] = useState('');
+  const [pinnedNotes, setPinnedNotes] = useState<Set<number>>(new Set());
+  const [draggedNote, setDraggedNote] = useState<number | null>(null);
 
   const { notes, isLoading, fetchNotes, createNote, updateNote, deleteNote } = useNoteStore();
   const {
@@ -142,6 +145,53 @@ const Notes: React.FC = () => {
     setSelectedNoteId(notes[next].id);
   }, [notes, selectedIndex]);
 
+  const togglePin = (noteId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setPinnedNotes((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(noteId)) {
+        newSet.delete(noteId);
+        toast.success('Note unpinned');
+      } else {
+        newSet.add(noteId);
+        toast.success('Note pinned');
+      }
+      return newSet;
+    });
+  };
+
+  const handleDragStart = (e: React.DragEvent, noteId: number) => {
+    setDraggedNote(noteId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, targetNoteId: number) => {
+    e.preventDefault();
+    if (draggedNote && draggedNote !== targetNoteId) {
+      toast.success('Note position updated');
+    }
+    setDraggedNote(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedNote(null);
+  };
+
+  const sortedNotes = useMemo(() => {
+    return [...notes].sort((a, b) => {
+      const aIsPinned = pinnedNotes.has(a.id);
+      const bIsPinned = pinnedNotes.has(b.id);
+      if (aIsPinned && !bIsPinned) return -1;
+      if (!aIsPinned && bIsPinned) return 1;
+      return 0;
+    });
+  }, [notes, pinnedNotes]);
+
   const panelOpen = isEditorOpen || isPreviewOpen;
 
   const getTagColor = (index: number) => {
@@ -167,13 +217,13 @@ const Notes: React.FC = () => {
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-3">
                     <SparklesIcon className="w-8 h-8 text-blue-600" />
-                    <h1 className="text-4xl font-bold text-slate-900 font-serif">Notes</h1>
+                    <h1 className={`font-bold text-slate-900 font-serif transition-all duration-300 ${panelOpen ? 'text-2xl' : 'text-4xl'}`}>Notes</h1>
                   </div>
-                  <p className="text-lg text-slate-600 leading-relaxed">Capture and organize your thoughts in your personal knowledge vault</p>
+                  <p className={`text-slate-600 leading-relaxed transition-all duration-300 ${panelOpen ? 'text-base' : 'text-lg'}`}>Capture and organize your thoughts in your personal knowledge vault</p>
                 </div>
               </div>
 
-              <div className="relative max-w-lg">
+              <div className={`relative transition-all duration-300 ${panelOpen ? 'max-w-md' : 'max-w-lg'}`}>
                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                   <MagnifyingGlassIcon className="h-5 w-5 text-slate-400" />
                 </div>
@@ -190,7 +240,7 @@ const Notes: React.FC = () => {
                 />
               </div>
 
-              {/* Notes Grid */}
+              {/* Notes Grid/List */}
               {isLoading ? (
                 <div className="flex items-center justify-center py-20">
                   <div className="relative">
@@ -199,7 +249,7 @@ const Notes: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div className={`transition-all duration-500 ${panelOpen ? 'space-y-4' : 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'}`}>
                   <div
                     role="button"
                     tabIndex={0}
@@ -208,44 +258,68 @@ const Notes: React.FC = () => {
                     onKeyDown={(e) => (e.key === 'Enter' ? openEditor() : null)}
                     className={`
                       group relative bg-white/60 backdrop-blur-sm rounded-3xl border-2 border-dashed border-slate-300/60
-                      flex flex-col items-center justify-center text-slate-500 min-h-[280px]
-                      transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
-                      hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-300 hover:text-blue-600
-                      hover:bg-gradient-to-br hover:from-blue-50/80 hover:to-indigo-50/80
-                      cursor-pointer animate-fadeIn shadow-sm hover:shadow-xl hover:shadow-blue-500/10
-                      ${panelOpen ? 'md:col-span-2 xl:col-span-3 p-8' : 'p-8'}
+                      flex items-center justify-center text-slate-500 transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] 
+                      transform-gpu will-change-transform hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-300 hover:text-blue-600
+                      hover:bg-gradient-to-br hover:from-blue-50/80 hover:to-indigo-50/80 cursor-pointer animate-fadeIn 
+                      shadow-sm hover:shadow-xl hover:shadow-blue-500/10
+                      ${panelOpen ? 'h-20 px-8 flex-row gap-4' : 'min-h-[280px] p-8 flex-col'}
                     `}
                     style={{ animationDelay: `0ms` }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="relative z-10 flex flex-col items-center">
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <PlusIcon className="h-8 w-8 text-blue-600" />
+                    <div className={`relative z-10 flex items-center ${panelOpen ? 'gap-4' : 'flex-col'}`}>
+                      <div className={`rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ${panelOpen ? 'w-12 h-12' : 'w-16 h-16 mb-4'}`}>
+                        <PlusIcon className={`text-blue-600 ${panelOpen ? 'h-6 w-6' : 'h-8 w-8'}`} />
                       </div>
-                      <span className="font-semibold text-lg">Create New Note</span>
-                      <span className="text-sm text-slate-400 mt-1">Start capturing your ideas</span>
+                      <div className={panelOpen ? 'text-left' : 'text-center'}>
+                        <span className={`font-semibold text-slate-700 ${panelOpen ? 'text-base' : 'text-lg'}`}>Create New Note</span>
+                        {!panelOpen && <span className="text-sm text-slate-400 mt-1 block">Start capturing your ideas</span>}
+                      </div>
                     </div>
                   </div>
 
-                  {notes.map((note, idx) => (
+                  {sortedNotes.map((note, idx) => (
                     <div
                       key={note.id}
                       role="button"
                       tabIndex={0}
                       aria-label={`Open note titled ${note.title}`}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, note.id)}
+                      onDragOver={handleDragOver}
+                      onDrop={(e) => handleDrop(e, note.id)}
+                      onDragEnd={handleDragEnd}
                       onClick={() => onCardClick(note)}
                       onKeyDown={(e) => (e.key === 'Enter' ? onCardClick(note) : null)}
                       className={`
                         group relative bg-white/80 backdrop-blur-sm rounded-3xl border border-slate-200/60
                         transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
                         hover:-translate-y-2 hover:scale-[1.02] hover:shadow-xl hover:shadow-slate-900/10
-                        hover:border-slate-300/80 cursor-pointer animate-fadeIn min-h-[280px]
-                        ${panelOpen ? 'md:col-span-2 xl:col-span-3 p-8' : 'p-8'}
+                        hover:border-slate-300/80 cursor-pointer animate-fadeIn
+                        ${draggedNote === note.id ? 'opacity-50 scale-95' : ''}
+                        ${pinnedNotes.has(note.id) ? 'ring-2 ring-amber-200 bg-gradient-to-br from-amber-50/50 to-yellow-50/50' : ''}
+                        ${panelOpen ? 'p-6 flex items-center gap-6 min-h-[120px]' : 'p-8 min-h-[280px]'}
                       `}
                       style={{ animationDelay: `${(idx + 1) * 80}ms` }}
                     >
-                      {/* Action Buttons */}
-                      <div className="absolute top-6 right-6 flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                      {panelOpen && (
+                        <div className="flex-shrink-0 p-2 text-slate-400 hover:text-slate-600 cursor-grab active:cursor-grabbing">
+                          <Bars3Icon className="w-5 h-5" />
+                        </div>
+                      )}
+
+                      <div className={`absolute flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 ${panelOpen ? 'top-4 right-4' : 'top-6 right-6'}`}>
+                        <button
+                          type="button"
+                          title={pinnedNotes.has(note.id) ? 'Unpin note' : 'Pin note'}
+                          aria-label={pinnedNotes.has(note.id) ? 'Unpin note' : 'Pin note'}
+                          onClick={(e) => togglePin(note.id, e)}
+                          className={`p-2.5 rounded-2xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm ${
+                            pinnedNotes.has(note.id) ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'
+                          }`}
+                        >
+                          {pinnedNotes.has(note.id) ? <StarSolidIcon className="h-4 w-4" /> : <StarIcon className="h-4 w-4" />}
+                        </button>
                         <button
                           type="button"
                           title="Edit note"
@@ -272,31 +346,39 @@ const Notes: React.FC = () => {
                         </button>
                       </div>
 
-                      <div className="flex flex-col h-full">
-                        {/* Title */}
-                        <h3 className="text-xl font-bold text-slate-900 mb-4 pr-20 leading-tight font-serif line-clamp-2">{note.title}</h3>
-
-                        {/* Content Preview */}
-                        <p className="text-slate-600 text-base mb-6 line-clamp-4 leading-relaxed flex-1">
-                          {note.content.substring(0, 180)}
-                          {note.content.length > 180 && '...'}
-                        </p>
-
-                        {/* Tags */}
-                        {note.tags?.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-6">
-                            {note.tags.slice(0, 3).map((tag, index) => (
-                              <span key={index} className={`inline-flex items-center px-3 py-1.5 rounded-2xl text-xs font-medium border ${getTagColor(index)}`}>
-                                {tag}
-                              </span>
-                            ))}
-                            {note.tags.length > 3 && <span className="inline-flex items-center px-3 py-1.5 rounded-2xl text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">+{note.tags.length - 3} more</span>}
+                      <div className={`flex h-full ${panelOpen ? 'flex-row items-center gap-6 flex-1' : 'flex-col'}`}>
+                        {panelOpen && pinnedNotes.has(note.id) && (
+                          <div className="flex-shrink-0">
+                            <StarSolidIcon className="w-5 h-5 text-amber-500" />
                           </div>
                         )}
 
-                        {/* Date */}
-                        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                          <div className="text-sm text-slate-500 flex items-center gap-2">
+                        <div className={panelOpen ? 'flex-1 min-w-0' : 'flex-1'}>
+                          <h3 className={`font-bold text-slate-900 leading-tight font-serif line-clamp-2 ${panelOpen ? 'text-lg mb-2 pr-0' : 'text-xl mb-4 pr-20'}`}>{note.title}</h3>
+
+                          <p className={`text-slate-600 leading-relaxed ${panelOpen ? 'text-sm line-clamp-2 mb-2' : 'text-base mb-6 line-clamp-4 flex-1'}`}>
+                            {note.content.substring(0, panelOpen ? 100 : 180)}
+                            {note.content.length > (panelOpen ? 100 : 180) && '...'}
+                          </p>
+
+                          {note.tags?.length > 0 && (
+                            <div className={`flex flex-wrap gap-2 ${panelOpen ? 'mb-2' : 'mb-6'}`}>
+                              {note.tags.slice(0, panelOpen ? 2 : 3).map((tag, index) => (
+                                <span key={index} className={`inline-flex items-center rounded-2xl font-medium border ${getTagColor(index)} ${panelOpen ? 'px-2 py-1 text-xs' : 'px-3 py-1.5 text-xs'}`}>
+                                  {tag}
+                                </span>
+                              ))}
+                              {note.tags.length > (panelOpen ? 2 : 3) && (
+                                <span className={`inline-flex items-center rounded-2xl font-medium bg-slate-100 text-slate-600 border border-slate-200 ${panelOpen ? 'px-2 py-1 text-xs' : 'px-3 py-1.5 text-xs'}`}>
+                                  +{note.tags.length - (panelOpen ? 2 : 3)} more
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className={`flex items-center justify-between ${panelOpen ? 'flex-shrink-0' : 'pt-4 border-t border-slate-100'}`}>
+                          <div className={`text-slate-500 flex items-center gap-2 ${panelOpen ? 'text-xs' : 'text-sm'}`}>
                             <BookmarkIcon className="w-4 h-4" />
                             {new Date(note.created_at).toLocaleDateString('en-US', {
                               year: 'numeric',
@@ -304,7 +386,7 @@ const Notes: React.FC = () => {
                               day: 'numeric',
                             })}
                           </div>
-                          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>
+                          {!panelOpen && <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>}
                         </div>
                       </div>
                     </div>
@@ -324,7 +406,6 @@ const Notes: React.FC = () => {
             >
               {isEditorOpen && (
                 <div className="p-8 animate-slideIn">
-                  {/* Header */}
                   <div className="flex items-center justify-between mb-8">
                     <div>
                       <h3 className="text-2xl font-bold text-slate-900 font-serif">{editingNote ? 'Edit Note' : 'Create New Note'}</h3>
@@ -335,7 +416,6 @@ const Notes: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* Form */}
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                     <div>
                       <label htmlFor="title" className="block text-sm font-semibold text-slate-700 mb-3">
@@ -376,7 +456,6 @@ const Notes: React.FC = () => {
                       />
                     </div>
 
-                    {/* Action Buttons */}
                     <div className="flex justify-end gap-4 pt-6 border-t border-slate-100">
                       <button type="button" onClick={closePanel} className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-medium transition-colors">
                         Cancel
@@ -396,7 +475,6 @@ const Notes: React.FC = () => {
 
               {isPreviewOpen && selectedNote && (
                 <div className="p-8 animate-slideIn">
-                  {/* Header */}
                   <div className="flex items-center justify-between mb-8">
                     <div className="flex gap-3">
                       <button type="button" onClick={goPrev} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Previous note" aria-label="Previous note">
@@ -411,7 +489,6 @@ const Notes: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* Content */}
                   <div className="space-y-8">
                     <div>
                       <h2 className="text-3xl font-bold text-slate-900 mb-4 leading-tight font-serif">{selectedNote.title}</h2>
@@ -428,7 +505,6 @@ const Notes: React.FC = () => {
                       <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8"></div>
                     </div>
 
-                    {/* Tags */}
                     {selectedNote.tags?.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-8">
                         {selectedNote.tags.map((tag, i) => (
@@ -439,10 +515,8 @@ const Notes: React.FC = () => {
                       </div>
                     )}
 
-                    {/* Content */}
                     <article className="prose prose-slate max-w-none text-slate-700 leading-relaxed text-base mb-8" dangerouslySetInnerHTML={{ __html: selectedNote.content }} />
 
-                    {/* Actions */}
                     <div className="flex gap-4 pt-8 border-t border-slate-100">
                       <button
                         type="button"
