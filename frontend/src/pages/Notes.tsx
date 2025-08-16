@@ -1,3 +1,5 @@
+'use client';
+
 import type React from 'react';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
@@ -127,7 +129,7 @@ const Notes: React.FC = () => {
       'bg-emerald-100 text-emerald-700 border-emerald-200', // Mint Green
       'bg-amber-100 text-amber-700 border-amber-200', // Pale Yellow
       'bg-rose-100 text-rose-700 border-rose-200', // Soft Pink
-      'bg-sky-100 text-sky-700 border-sky-200', // Sky Blue
+      'bg-blue-100 text-blue-700 border-blue-200', // Updated to use Modern Blue palette
     ];
     return colors[index % colors.length];
   };
@@ -138,10 +140,10 @@ const Notes: React.FC = () => {
         {/* LEFT: Notes List */}
         <div className="space-y-10 min-w-0">
           <div className="relative">
-            <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-2xl"></div>
+            <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-2xl"></div>
             <div className="relative">
               <div className="flex items-center gap-3 mb-3">
-                <SparklesIcon className="w-8 h-8 text-indigo-600" />
+                <SparklesIcon className="w-8 h-8 text-blue-600" />
                 <h1 className="text-4xl font-bold text-slate-900 font-serif">Notes</h1>
               </div>
               <p className="text-lg text-slate-600 leading-relaxed">Capture and organize your thoughts in your personal knowledge vault</p>
@@ -159,7 +161,7 @@ const Notes: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="block w-full pl-14 pr-6 py-4 bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-3xl
-                         focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300
+                         focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300
                          shadow-sm shadow-slate-900/5 transition-all duration-200
                          placeholder:text-slate-400 text-slate-700"
             />
@@ -169,8 +171,8 @@ const Notes: React.FC = () => {
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <div className="relative">
-                <div className="animate-spin rounded-full h-12 w-12 border-2 border-indigo-200"></div>
-                <div className="animate-spin rounded-full h-12 w-12 border-2 border-indigo-600 border-t-transparent absolute top-0"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-200"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-600 border-t-transparent absolute top-0"></div>
               </div>
             </div>
           ) : (
@@ -185,17 +187,17 @@ const Notes: React.FC = () => {
                   group relative bg-white/60 backdrop-blur-sm rounded-3xl border-2 border-dashed border-slate-300/60
                   flex flex-col items-center justify-center text-slate-500 min-h-[280px]
                   transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
-                  hover:-translate-y-2 hover:scale-[1.02] hover:border-indigo-300 hover:text-indigo-600
-                  hover:bg-gradient-to-br hover:from-indigo-50/80 hover:to-purple-50/80
-                  cursor-pointer animate-fadeIn shadow-sm hover:shadow-xl hover:shadow-indigo-500/10
+                  hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-300 hover:text-blue-600
+                  hover:bg-gradient-to-br hover:from-blue-50/80 hover:to-indigo-50/80
+                  cursor-pointer animate-fadeIn shadow-sm hover:shadow-xl hover:shadow-blue-500/10
                   ${panelOpen ? 'md:col-span-2 xl:col-span-3 p-8' : 'p-8'}
                 `}
                 style={{ animationDelay: `0ms` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <PlusIcon className="h-8 w-8 text-indigo-600" />
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <PlusIcon className="h-8 w-8 text-blue-600" />
                   </div>
                   <span className="font-semibold text-lg">Create New Note</span>
                   <span className="text-sm text-slate-400 mt-1">Start capturing your ideas</span>
@@ -229,7 +231,7 @@ const Notes: React.FC = () => {
                         e.stopPropagation();
                         openEditor(note);
                       }}
-                      className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-2xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm"
+                      className="p-2.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm"
                     >
                       <PencilIcon className="h-4 w-4" />
                     </button>
@@ -279,7 +281,7 @@ const Notes: React.FC = () => {
                           day: 'numeric',
                         })}
                       </div>
-                      <div className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-400 to-purple-400"></div>
+                      <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>
                     </div>
                   </div>
                 </div>
@@ -321,7 +323,7 @@ const Notes: React.FC = () => {
                     placeholder="Enter a compelling title..."
                     {...register('title', { required: 'Title is required' })}
                     className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
-                               focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300 focus:bg-white
+                               focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
                                transition-all duration-200 text-slate-900 placeholder:text-slate-400"
                   />
                   {errors.title && <p className="mt-2 text-sm text-red-600 flex items-center gap-1">{errors.title.message}</p>}
@@ -337,7 +339,7 @@ const Notes: React.FC = () => {
                     {...register('content', { required: 'Content is required' })}
                     rows={12}
                     className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
-                               focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300 focus:bg-white
+                               focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
                                transition-all duration-200 text-slate-900 placeholder:text-slate-400 resize-none"
                   />
                   {errors.content && <p className="mt-2 text-sm text-red-600">{errors.content.message}</p>}
@@ -352,7 +354,7 @@ const Notes: React.FC = () => {
                     placeholder="Add tags separated by commas..."
                     {...register('tags')}
                     className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
-                               focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300 focus:bg-white
+                               focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
                                transition-all duration-200 text-slate-900 placeholder:text-slate-400"
                   />
                 </div>
@@ -364,9 +366,9 @@ const Notes: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 
-                               text-white rounded-2xl font-medium shadow-lg shadow-indigo-500/25 transition-all duration-200 
-                               hover:shadow-xl hover:shadow-indigo-500/30 hover:-translate-y-0.5"
+                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 
+                               text-white rounded-2xl font-medium shadow-lg shadow-blue-500/25 transition-all duration-200 
+                               hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5"
                   >
                     {editingNote ? 'Update Note' : 'Create Note'}
                   </button>
@@ -427,7 +429,7 @@ const Notes: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => openEditor(selectedNote)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100 
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-blue-50 text-blue-700 hover:bg-blue-100 
                                transition-colors font-medium"
                     title="Edit note"
                     aria-label="Edit note"
