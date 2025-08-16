@@ -339,27 +339,28 @@ const Notes: React.FC = () => {
                         ${draggedNote === note.id ? 'opacity-30 scale-95 cursor-grabbing' : 'cursor-grab hover:cursor-grab'} 
                         ${dragOverNote === note.id ? 'ring-2 ring-blue-400 bg-blue-50/50 border-blue-300' : ''}
                         ${pinnedNotes.has(note.id) ? 'ring-2 ring-amber-200 bg-gradient-to-br from-amber-50/50 to-yellow-50/50' : ''}
-                        ${panelOpen ? 'p-4 flex items-center gap-4 min-h-[100px] rounded-2xl' : 'p-8 min-h-[280px] rounded-3xl'}
+                        ${selectedNoteId === note.id && panelOpen ? 'ring-2 ring-blue-300 bg-blue-50/30 border-blue-300' : ''}
+                        ${panelOpen ? 'p-6 flex items-start gap-5 min-h-[120px] rounded-2xl hover:translate-y-0 hover:scale-100' : 'p-8 min-h-[280px] rounded-3xl'}
                       `}
                       style={{ animationDelay: `${(idx + 1) * 80}ms` }}
                     >
                       {panelOpen && (
-                        <div className="flex-shrink-0 p-2 text-slate-400 hover:text-slate-600 cursor-grab active:cursor-grabbing rounded-lg hover:bg-slate-100 transition-all duration-200 hover:scale-110">
+                        <div className="flex-shrink-0 mt-1 p-3 text-slate-400 hover:text-slate-600 cursor-grab active:cursor-grabbing rounded-xl hover:bg-slate-100/80 transition-all duration-200 hover:scale-110 group-hover:bg-slate-50">
                           <Bars3Icon className="w-5 h-5" />
                         </div>
                       )}
 
-                      <div className={`absolute flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 ${panelOpen ? 'top-3 right-3' : 'top-6 right-6'}`}>
+                      <div className={`absolute flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 ${panelOpen ? 'top-4 right-4' : 'top-6 right-6'}`}>
                         <button
                           type="button"
                           title={pinnedNotes.has(note.id) ? 'Unpin note' : 'Pin note'}
                           aria-label={pinnedNotes.has(note.id) ? 'Unpin note' : 'Pin note'}
                           onClick={(e) => togglePin(note.id, e)}
-                          className={`rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm hover:scale-110 ${
-                            pinnedNotes.has(note.id) ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'
-                          } ${panelOpen ? 'p-1.5' : 'p-2'}`}
+                          className={`rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/90 shadow-sm hover:scale-110 border border-white/50 ${
+                            pinnedNotes.has(note.id) ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50 hover:border-amber-200' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50 hover:border-amber-200'
+                          } ${panelOpen ? 'p-2' : 'p-2'}`}
                         >
-                          {pinnedNotes.has(note.id) ? <MapPinSolidIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} /> : <MapPinIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} />}
+                          {pinnedNotes.has(note.id) ? <MapPinSolidIcon className={panelOpen ? 'h-4 w-4' : 'h-4 w-4'} /> : <MapPinIcon className={panelOpen ? 'h-4 w-4' : 'h-4 w-4'} />}
                         </button>
                         <button
                           type="button"
@@ -369,9 +370,11 @@ const Notes: React.FC = () => {
                             e.stopPropagation();
                             openEditor(note);
                           }}
-                          className={`text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm hover:scale-110 ${panelOpen ? 'p-1.5' : 'p-2'}`}
+                          className={`text-slate-400 hover:text-blue-600 hover:bg-blue-50 hover:border-blue-200 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/90 shadow-sm hover:scale-110 border border-white/50 ${
+                            panelOpen ? 'p-2' : 'p-2'
+                          }`}
                         >
-                          <PencilIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
+                          <PencilIcon className={panelOpen ? 'h-4 w-4' : 'h-4 w-4'} />
                         </button>
                         <button
                           type="button"
@@ -381,51 +384,56 @@ const Notes: React.FC = () => {
                             e.stopPropagation();
                             handleDelete(note.id);
                           }}
-                          className={`text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/80 shadow-sm hover:scale-110 ${panelOpen ? 'p-1.5' : 'p-2'}`}
+                          className={`text-slate-400 hover:text-red-600 hover:bg-red-50 hover:border-red-200 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/90 shadow-sm hover:scale-110 border border-white/50 ${
+                            panelOpen ? 'p-2' : 'p-2'
+                          }`}
                         >
-                          <TrashIcon className={panelOpen ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
+                          <TrashIcon className={panelOpen ? 'h-4 w-4' : 'h-4 w-4'} />
                         </button>
                       </div>
 
-                      <div className={`flex h-full ${panelOpen ? 'flex-row items-center gap-4 flex-1' : 'flex-col'}`}>
+                      <div className={`flex h-full ${panelOpen ? 'flex-col flex-1 min-w-0 space-y-3' : 'flex-col'}`}>
                         {panelOpen && pinnedNotes.has(note.id) && (
-                          <div className="flex-shrink-0">
-                            <MapPinSolidIcon className="w-4 h-4 text-amber-500" />
+                          <div className="flex items-center gap-2 text-amber-600">
+                            <MapPinSolidIcon className="w-4 h-4" />
+                            <span className="text-xs font-medium">Pinned</span>
                           </div>
                         )}
 
-                        <div className={panelOpen ? 'flex-1 min-w-0' : 'flex-1'}>
-                          <h3 className={`font-bold text-slate-900 leading-tight font-serif line-clamp-2 ${panelOpen ? 'text-base mb-1 pr-0' : 'text-xl mb-4 pr-20'}`}>{note.title}</h3>
+                        <div className={panelOpen ? 'flex-1 space-y-2' : 'flex-1'}>
+                          <h3 className={`font-bold text-slate-900 leading-tight font-serif ${panelOpen ? 'text-lg mb-0 pr-16 line-clamp-2' : 'text-xl mb-4 pr-20 line-clamp-2'}`}>{note.title}</h3>
 
-                          <p className={`text-slate-600 leading-relaxed ${panelOpen ? 'text-xs line-clamp-1 mb-2' : 'text-base mb-6 line-clamp-4 flex-1'}`}>
-                            {note.content.substring(0, panelOpen ? 80 : 180)}
-                            {note.content.length > (panelOpen ? 80 : 180) && '...'}
+                          <p className={`text-slate-600 leading-relaxed ${panelOpen ? 'text-sm line-clamp-2 mb-0' : 'text-base mb-6 line-clamp-4 flex-1'}`}>
+                            {note.content.substring(0, panelOpen ? 120 : 180)}
+                            {note.content.length > (panelOpen ? 120 : 180) && '...'}
                           </p>
 
                           {note.tags?.length > 0 && (
-                            <div className={`flex flex-wrap gap-1.5 ${panelOpen ? 'mb-1' : 'mb-6'}`}>
-                              {note.tags.slice(0, panelOpen ? 1 : 3).map((tag, index) => (
-                                <span key={index} className={`inline-flex items-center rounded-xl font-medium border ${getTagColor(index)} ${panelOpen ? 'px-2 py-0.5 text-xs' : 'px-3 py-1.5 text-xs'}`}>
+                            <div className={`flex flex-wrap gap-1.5 ${panelOpen ? 'mb-0' : 'mb-6'}`}>
+                              {note.tags.slice(0, panelOpen ? 2 : 3).map((tag, index) => (
+                                <span key={index} className={`inline-flex items-center rounded-xl font-medium border ${getTagColor(index)} ${panelOpen ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-xs'}`}>
                                   {tag}
                                 </span>
                               ))}
-                              {note.tags.length > (panelOpen ? 1 : 3) && (
-                                <span className={`inline-flex items-center rounded-xl font-medium bg-slate-100 text-slate-600 border border-slate-200 ${panelOpen ? 'px-2 py-0.5 text-xs' : 'px-3 py-1.5 text-xs'}`}>
-                                  +{note.tags.length - (panelOpen ? 1 : 3)}
+                              {note.tags.length > (panelOpen ? 2 : 3) && (
+                                <span className={`inline-flex items-center rounded-xl font-medium bg-slate-100 text-slate-600 border border-slate-200 ${panelOpen ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-xs'}`}>
+                                  +{note.tags.length - (panelOpen ? 2 : 3)}
                                 </span>
                               )}
                             </div>
                           )}
                         </div>
 
-                        <div className={`flex items-center justify-between ${panelOpen ? 'flex-shrink-0' : 'pt-4 border-t border-slate-100'}`}>
-                          <div className={`text-slate-500 flex items-center gap-1.5 ${panelOpen ? 'text-xs' : 'text-sm'}`}>
-                            <BookmarkIcon className={panelOpen ? 'w-3 h-3' : 'w-4 h-4'} />
-                            {new Date(note.created_at).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                            })}
+                        <div className={`flex items-center justify-between ${panelOpen ? 'pt-2 border-t border-slate-100/80' : 'pt-4 border-t border-slate-100'}`}>
+                          <div className={`text-slate-500 flex items-center gap-2 ${panelOpen ? 'text-xs' : 'text-sm'}`}>
+                            <BookmarkIcon className={panelOpen ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
+                            <span className="font-medium">
+                              {new Date(note.created_at).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                              })}
+                            </span>
                           </div>
                           {!panelOpen && <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>}
                         </div>
