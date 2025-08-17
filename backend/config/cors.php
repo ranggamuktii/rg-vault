@@ -2,7 +2,7 @@
 return [
     'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['https://vault.ranggamukti.my.id' || 'http://localhost:3000'],
+    'allowed_origins' => ['https://vault.ranggamukti.my.id' || 'http://localhost:8000'],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],

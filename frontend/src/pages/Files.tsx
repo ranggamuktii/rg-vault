@@ -224,15 +224,15 @@ const Files: React.FC = () => {
   return (
     <MainLayout>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
-        <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8 space-y-6 sm:space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <div>
-              <h1 className="text-3xl font-semibold text-gray-900 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text">📂 Files</h1>
-              <p className="text-gray-600 mt-2 text-lg">Store and manage your documents with ease</p>
+              <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text">📂 Files</h1>
+              <p className="text-gray-600 mt-1 sm:mt-2 text-base sm:text-lg">Store and manage your documents with ease</p>
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div
               onClick={handleFileSelect}
               onDragOver={(e) => e.preventDefault()}
@@ -240,34 +240,34 @@ const Files: React.FC = () => {
                 e.preventDefault();
                 if (e.dataTransfer.files.length > 0) handleFilesSelected(e.dataTransfer.files);
               }}
-              className="relative group cursor-pointer rounded-3xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/40 p-16 transition-all duration-300 hover:border-blue-400 hover:from-blue-50 hover:to-indigo-100/60 hover:shadow-lg hover:shadow-blue-100/50"
+              className="relative group cursor-pointer rounded-2xl sm:rounded-3xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/40 p-12 sm:p-16 transition-all duration-300 hover:border-blue-400 hover:from-blue-50 hover:to-indigo-100/60 hover:shadow-lg hover:shadow-blue-100/50"
             >
-              <div className="flex flex-col items-center justify-center space-y-6 text-center">
-                <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
-                  <PlusIcon className="h-12 w-12 text-white" />
+              <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 text-center">
+                <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+                  <PlusIcon className="h-10 sm:h-12 w-10 sm:w-12 text-white" />
                 </div>
                 <div>
-                  <p className="text-xl font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">Drag & Drop files here</p>
-                  <p className="text-gray-500 mt-2 text-lg">or click to browse</p>
+                  <p className="text-lg sm:text-xl font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">Drag & Drop files here</p>
+                  <p className="text-gray-500 mt-1 sm:mt-2 text-base sm:text-lg">or click to browse</p>
                 </div>
               </div>
             </div>
 
             <div className="max-w-sm">
-              <label className="block text-sm font-semibold text-gray-700 mb-3">Category (optional)</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2 sm:mb-3">Category (optional)</label>
               <input
                 type="text"
                 placeholder="e.g. Invoices, Reports, Photos..."
                 value={uploadCategory}
                 onChange={(e) => setUploadCategory(e.target.value)}
-                className="block w-full px-5 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm shadow-sm bg-white/80 backdrop-blur-sm"
+                className="block w-full px-4 sm:px-5 py-3 sm:py-4 border border-gray-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm shadow-sm bg-white/80 backdrop-blur-sm"
               />
             </div>
           </div>
 
           {pendingFiles.length > 0 && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text">Pending Uploads</h2>
+            <div className="space-y-4 sm:space-y-6">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text">Pending Uploads</h2>
               <DragDropContext
                 onDragEnd={(result) => {
                   if (!result.destination) return;
@@ -279,7 +279,7 @@ const Files: React.FC = () => {
               >
                 <Droppable droppableId="pending-files">
                   {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-4">
+                    <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3 sm:space-y-4">
                       {pendingFiles.map((pf, idx) => (
                         <Draggable key={pf.file.name} draggableId={pf.file.name} index={idx}>
                           {(provided) => (
@@ -287,21 +287,21 @@ const Files: React.FC = () => {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              className="flex items-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all duration-300"
+                              className="flex items-center p-4 sm:p-6 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all duration-300"
                             >
                               {pf.preview ? (
-                                <img src={pf.preview || '/placeholder.svg'} alt={pf.file.name} className="h-14 w-14 rounded-xl object-cover shadow-sm" />
+                                <img src={pf.preview || '/placeholder.svg'} alt={pf.file.name} className="h-12 sm:h-14 w-12 sm:w-14 rounded-lg sm:rounded-xl object-cover shadow-sm" />
                               ) : (
-                                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                  <DocumentIcon className="h-8 w-8 text-gray-400" />
+                                <div className="h-12 sm:h-14 w-12 sm:w-14 rounded-lg sm:rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                  <DocumentIcon className="h-6 sm:h-8 w-6 sm:w-8 text-gray-400" />
                                 </div>
                               )}
 
-                              <div className="ml-5 flex-1">
+                              <div className="ml-4 sm:ml-5 flex-1">
                                 <p className="text-sm font-semibold truncate text-gray-900">{pf.file.name}</p>
-                                <div className="w-full bg-gray-200 rounded-full h-3 mt-3 overflow-hidden">
+                                <div className="w-full bg-gray-200 rounded-full h-2.5 sm:h-3 mt-2 sm:mt-3 overflow-hidden">
                                   <div
-                                    className={`h-3 rounded-full transition-all duration-300 ${
+                                    className={`h-2.5 sm:h-3 rounded-full transition-all duration-300 ${
                                       pf.status === 'error'
                                         ? 'bg-gradient-to-r from-red-500 to-red-600'
                                         : pf.status === 'done'
@@ -325,10 +325,10 @@ const Files: React.FC = () => {
                   )}
                 </Droppable>
 
-                <div className="pt-6">
+                <div className="pt-4 sm:pt-6">
                   <button
                     onClick={startUploadAll}
-                    className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:shadow-blue-200/50 transform hover:-translate-y-0.5"
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl sm:rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:shadow-blue-200/50 transform hover:-translate-y-0.5 text-sm sm:text-base"
                   >
                     Upload All Files
                   </button>
@@ -338,38 +338,41 @@ const Files: React.FC = () => {
           )}
 
           {isLoading ? (
-            <div className="flex items-center justify-center py-16">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-3 border-blue-600"></div>
+            <div className="flex items-center justify-center py-12 sm:py-16">
+              <div className="animate-spin rounded-full h-8 sm:h-10 w-8 sm:w-10 border-b-3 border-blue-600"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {files.map((file) => {
                 const FileIconComponent = getFileIcon(file.mimetype);
                 return (
-                  <div key={file.id} className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-100 hover:border-gray-200 hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 group hover:-translate-y-1">
-                    <div className="mb-5">
+                  <div
+                    key={file.id}
+                    className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-gray-100 hover:border-gray-200 hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 group hover:-translate-y-1"
+                  >
+                    <div className="mb-4 sm:mb-5">
                       {file.mimetype.startsWith('image/') ? (
-                        <div className="w-full h-36 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl overflow-hidden shadow-inner">
+                        <div className="w-full h-32 sm:h-36 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl sm:rounded-2xl overflow-hidden shadow-inner">
                           <img src={file.storage_url || '/placeholder.svg'} alt={file.filename} className="w-full h-full object-cover" />
                         </div>
                       ) : (
-                        <div className="w-full h-36 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl flex items-center justify-center shadow-inner">
-                          <FileIconComponent className="h-16 w-16 text-gray-400" />
+                        <div className="w-full h-32 sm:h-36 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-inner">
+                          <FileIconComponent className="h-12 sm:h-16 w-12 sm:w-16 text-gray-400" />
                         </div>
                       )}
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                       <h3 className="text-sm font-semibold text-gray-900 truncate" title={file.filename}>
                         {file.filename}
                       </h3>
 
                       <div className="flex items-center justify-between text-xs">
                         <span className="text-gray-500 font-medium">{formatFileSize(file.size)}</span>
-                        {file.category && <span className="bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 px-3 py-1.5 rounded-full font-medium">{file.category}</span>}
+                        {file.category && <span className="bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full font-medium">{file.category}</span>}
                       </div>
 
-                      <div className="text-xs text-gray-500 pt-3 border-t border-gray-100 font-medium">
+                      <div className="text-xs text-gray-500 pt-2 sm:pt-3 border-t border-gray-100 font-medium">
                         {new Date(file.created_at).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'short',
@@ -377,13 +380,20 @@ const Files: React.FC = () => {
                         })}
                       </div>
 
-                      <div className="flex justify-between items-center pt-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <button onClick={() => handleDownload(file)} className="inline-flex items-center text-xs text-blue-600 hover:text-blue-700 font-semibold bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-xl transition-all duration-200">
-                          <ArrowDownTrayIcon className="h-4 w-4 mr-1.5" />
+                      <div className="flex justify-between items-center pt-2 sm:pt-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <button
+                          onClick={() => handleDownload(file)}
+                          className="inline-flex items-center text-xs text-blue-600 hover:text-blue-700 font-semibold bg-blue-50 hover:bg-blue-100 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-200"
+                        >
+                          <ArrowDownTrayIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4 mr-1 sm:mr-1.5" />
                           Download
                         </button>
-                        <button onClick={() => handleDelete(file.id, file.filename)} className="p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200" title={`Delete ${file.filename}`}>
-                          <TrashIcon className="h-4 w-4" />
+                        <button
+                          onClick={() => handleDelete(file.id, file.filename)}
+                          className="p-2 sm:p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg sm:rounded-xl transition-all duration-200"
+                          title={`Delete ${file.filename}`}
+                        >
+                          <TrashIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                         </button>
                       </div>
                     </div>

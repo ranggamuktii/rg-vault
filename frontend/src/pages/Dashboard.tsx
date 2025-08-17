@@ -1,3 +1,5 @@
+'use client';
+
 import type React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -159,117 +161,117 @@ const Dashboard: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-8 p-8">
-        <div className="bg-gradient-to-r from-white to-blue-50/30 rounded-3xl p-10 border border-gray-100/50 shadow-sm">
-          <h1 className="text-4xl font-light text-gray-900 mb-3">
+      <div className="space-y-6 sm:space-y-8 p-4 sm:p-8">
+        <div className="bg-gradient-to-r from-white to-blue-50/30 rounded-2xl sm:rounded-3xl p-6 sm:p-10 border border-gray-100/50 shadow-sm">
+          <h1 className="text-2xl sm:text-4xl font-light text-gray-900 mb-2 sm:mb-3">
             {getGreetingID()}, {firstName} 👋
           </h1>
-          <p className="text-lg text-gray-600">Here's what's happening with your personal vault today</p>
+          <p className="text-base sm:text-lg text-gray-600">Here's what's happening with your personal vault today</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {statCards.map((card) => {
             const IconComponent = card.icon;
             return (
-              <Link key={card.title} to={card.link} className={`bg-white rounded-3xl p-8 border ${card.borderColor} hover:border-gray-200 hover:shadow-lg transition-all duration-300 group`}>
-                <div className="flex items-center justify-between mb-6">
-                  <div className={`p-4 rounded-2xl ${card.iconBg} group-hover:scale-110 transition-transform duration-300`}>
-                    <IconComponent className={`h-7 w-7 ${card.iconColor}`} />
+              <Link key={card.title} to={card.link} className={`bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border ${card.borderColor} hover:border-gray-200 hover:shadow-lg transition-all duration-300 group`}>
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${card.iconBg} group-hover:scale-110 transition-transform duration-300`}>
+                    <IconComponent className={`h-6 sm:h-7 w-6 sm:w-7 ${card.iconColor}`} />
                   </div>
-                  <ArrowRightIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all duration-300" />
+                  <ArrowRightIcon className="h-4 sm:h-5 w-4 sm:w-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all duration-300" />
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-gray-900 mb-2">{card.value}</p>
-                  <p className="text-base text-gray-600 font-medium">{card.title}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">{card.value}</p>
+                  <p className="text-sm sm:text-base text-gray-600 font-medium">{card.title}</p>
                 </div>
               </Link>
             );
           })}
         </div>
 
-        <div className="bg-white rounded-3xl border border-gray-100/50 overflow-hidden shadow-sm">
-          <div className="p-8 border-b border-gray-100/50 bg-gradient-to-r from-gray-50/30 to-white">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100/50 overflow-hidden shadow-sm">
+          <div className="p-6 sm:p-8 border-b border-gray-100/50 bg-gradient-to-r from-gray-50/30 to-white">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-2xl font-semibold text-gray-900">Productivity Hub</h3>
-                <p className="text-gray-600 mt-2">Quick actions to boost your workflow</p>
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Productivity Hub</h3>
+                <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">Quick actions to boost your workflow</p>
               </div>
-              <div className="flex items-center space-x-3">
-                <div className="h-3 w-3 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-sm text-gray-500 font-medium">Ready</span>
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <div className="h-2.5 sm:h-3 w-2.5 sm:w-3 bg-green-500 rounded-full animate-pulse" />
+                <span className="text-xs sm:text-sm text-gray-500 font-medium">Ready</span>
               </div>
             </div>
           </div>
 
-          <div className="p-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 sm:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
               <button
                 type="button"
                 aria-label="Create note"
                 onClick={() => setShowNoteModal(true)}
-                className="group relative bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-3xl p-8 transition-all duration-300 border border-blue-200/50 hover:border-blue-300 hover:shadow-lg"
+                className="group relative bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 border border-blue-200/50 hover:border-blue-300 hover:shadow-lg"
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div className="p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <DocumentTextIcon className="h-7 w-7 text-white" />
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <div className="p-3 sm:p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl sm:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <DocumentTextIcon className="h-6 sm:h-7 w-6 sm:w-7 text-white" />
                   </div>
-                  <div className="text-xs bg-blue-200/80 text-blue-800 px-3 py-1.5 rounded-full font-semibold">Ctrl+N</div>
+                  <div className="text-xs bg-blue-200/80 text-blue-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-semibold">Ctrl+N</div>
                 </div>
-                <h4 className="font-bold text-gray-900 mb-3 text-lg">Create Note</h4>
-                <p className="text-sm text-gray-600">Write and organize your thoughts</p>
+                <h4 className="font-bold text-gray-900 mb-2 sm:mb-3 text-base sm:text-lg">Create Note</h4>
+                <p className="text-xs sm:text-sm text-gray-600">Write and organize your thoughts</p>
               </button>
 
               <button
                 type="button"
                 aria-label="Save link"
                 onClick={() => setShowLinkModal(true)}
-                className="group relative bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-3xl p-8 transition-all duration-300 border border-green-200/50 hover:border-green-300 hover:shadow-lg"
+                className="group relative bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 border border-green-200/50 hover:border-green-300 hover:shadow-lg"
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div className="p-4 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <LinkIcon className="h-7 w-7 text-white" />
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <div className="p-3 sm:p-4 bg-gradient-to-br from-green-500 to-green-600 rounded-xl sm:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <LinkIcon className="h-6 sm:h-7 w-6 sm:w-7 text-white" />
                   </div>
-                  <div className="text-xs bg-green-200/80 text-green-800 px-3 py-1.5 rounded-full font-semibold">Ctrl+L</div>
+                  <div className="text-xs bg-green-200/80 text-green-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-semibold">Ctrl+L</div>
                 </div>
-                <h4 className="font-bold text-gray-900 mb-3 text-lg">Save Link</h4>
-                <p className="text-sm text-gray-600">Bookmark important resources</p>
+                <h4 className="font-bold text-gray-900 mb-2 sm:mb-3 text-base sm:text-lg">Save Link</h4>
+                <p className="text-xs sm:text-sm text-gray-600">Bookmark important resources</p>
               </button>
 
               <button
                 type="button"
                 aria-label="Upload file"
                 onClick={() => fileInputRef.current?.click()}
-                className="group relative bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-3xl p-8 transition-all duration-300 border border-purple-200/50 hover:border-purple-300 hover:shadow-lg"
+                className="group relative bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 border border-purple-200/50 hover:border-purple-300 hover:shadow-lg"
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div className="p-4 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <FolderIcon className="h-7 w-7 text-white" />
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl sm:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <FolderIcon className="h-6 sm:h-7 w-6 sm:w-7 text-white" />
                   </div>
-                  <div className="text-xs bg-purple-200/80 text-purple-800 px-3 py-1.5 rounded-full font-semibold">Ctrl+U</div>
+                  <div className="text-xs bg-purple-200/80 text-purple-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-semibold">Ctrl+U</div>
                 </div>
-                <h4 className="font-bold text-gray-900 mb-3 text-lg">Upload File</h4>
-                <p className="text-sm text-gray-600">Store documents and media</p>
+                <h4 className="font-bold text-gray-900 mb-2 sm:mb-3 text-base sm:text-lg">Upload File</h4>
+                <p className="text-xs sm:text-sm text-gray-600">Store documents and media</p>
               </button>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Recent Notes */}
-          <div className="bg-white rounded-3xl p-8 border border-gray-100/50 shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-semibold text-gray-900">Recent Notes</h3>
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-100/50 shadow-sm">
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Recent Notes</h3>
               <Link to="/notes" className="text-sm text-blue-600 hover:text-blue-700 flex items-center font-semibold group">
                 View all
-                <ArrowRightIcon className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                <ArrowRightIcon className="h-3 sm:h-4 w-3 sm:w-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {stats?.recentNotes?.length ? (
                 stats.recentNotes.slice(0, 4).map((note) => (
-                  <div key={note.id} className="flex items-start space-x-4 p-4 rounded-2xl hover:bg-blue-50/50 transition-colors duration-200">
-                    <div className="p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl">
-                      <DocumentTextIcon className="h-5 w-5 text-blue-600" />
+                  <div key={note.id} className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl hover:bg-blue-50/50 transition-colors duration-200">
+                    <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl sm:rounded-2xl">
+                      <DocumentTextIcon className="h-4 sm:h-5 w-4 sm:w-5 text-blue-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-gray-900 truncate">{note.title}</p>
@@ -278,11 +280,11 @@ const Dashboard: React.FC = () => {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-12">
-                  <div className="mx-auto h-16 w-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mb-4">
-                    <DocumentTextIcon className="h-8 w-8 text-blue-500" />
+                <div className="text-center py-8 sm:py-12">
+                  <div className="mx-auto h-12 sm:h-16 w-12 sm:w-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-3 sm:mb-4">
+                    <DocumentTextIcon className="h-6 sm:h-8 w-6 sm:w-8 text-blue-500" />
                   </div>
-                  <p className="text-sm text-gray-500 mb-3">No notes yet</p>
+                  <p className="text-sm text-gray-500 mb-2 sm:mb-3">No notes yet</p>
                   <button type="button" aria-label="Create first note" onClick={() => setShowNoteModal(true)} className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
                     Create your first note
                   </button>
@@ -292,20 +294,20 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Recent Links */}
-          <div className="bg-white rounded-3xl p-8 border border-gray-100/50 shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-semibold text-gray-900">Recent Links</h3>
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-100/50 shadow-sm">
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Recent Links</h3>
               <Link to="/links" className="text-sm text-blue-600 hover:text-blue-700 flex items-center font-semibold group">
                 View all
-                <ArrowRightIcon className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                <ArrowRightIcon className="h-3 sm:h-4 w-3 sm:w-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {stats?.recentLinks?.length ? (
                 stats.recentLinks.slice(0, 4).map((link) => (
-                  <div key={link.id} className="flex items-start space-x-4 p-4 rounded-2xl hover:bg-green-50/50 transition-colors duration-200">
-                    <div className="p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl">
-                      <LinkIcon className="h-5 w-5 text-green-600" />
+                  <div key={link.id} className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl hover:bg-green-50/50 transition-colors duration-200">
+                    <div className="p-2 sm:p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-xl sm:rounded-2xl">
+                      <LinkIcon className="h-4 sm:h-5 w-4 sm:w-5 text-green-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-gray-900 truncate">{link.title || 'Untitled'}</p>
@@ -314,11 +316,11 @@ const Dashboard: React.FC = () => {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-12">
-                  <div className="mx-auto h-16 w-16 bg-gradient-to-br from-green-100 to-green-200 rounded-3xl flex items-center justify-center mb-4">
-                    <LinkIcon className="h-8 w-8 text-green-500" />
+                <div className="text-center py-8 sm:py-12">
+                  <div className="mx-auto h-12 sm:h-16 w-12 sm:w-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-3 sm:mb-4">
+                    <LinkIcon className="h-6 sm:h-8 w-6 sm:w-8 text-green-500" />
                   </div>
-                  <p className="text-sm text-gray-500 mb-3">No links yet</p>
+                  <p className="text-sm text-gray-500 mb-2 sm:mb-3">No links yet</p>
                   <button type="button" aria-label="Save first link" onClick={() => setShowLinkModal(true)} className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
                     Save your first link
                   </button>
@@ -328,20 +330,20 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Recent Files */}
-          <div className="bg-white rounded-3xl p-8 border border-gray-100/50 shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-semibold text-gray-900">Recent Files</h3>
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-100/50 shadow-sm">
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Recent Files</h3>
               <Link to="/files" className="text-sm text-blue-600 hover:text-blue-700 flex items-center font-semibold group">
                 View all
-                <ArrowRightIcon className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                <ArrowRightIcon className="h-3 sm:h-4 w-3 sm:w-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {stats?.recentFiles?.length ? (
                 stats.recentFiles.slice(0, 4).map((file) => (
-                  <div key={file.id} className="flex items-start space-x-4 p-4 rounded-2xl hover:bg-purple-50/50 transition-colors duration-200">
-                    <div className="p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl">
-                      <FolderIcon className="h-5 w-5 text-purple-600" />
+                  <div key={file.id} className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl hover:bg-purple-50/50 transition-colors duration-200">
+                    <div className="p-2 sm:p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl sm:rounded-2xl">
+                      <FolderIcon className="h-4 sm:h-5 w-4 sm:w-5 text-purple-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-gray-900 truncate">{file.name}</p>
@@ -350,11 +352,11 @@ const Dashboard: React.FC = () => {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-12">
-                  <div className="mx-auto h-16 w-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-3xl flex items-center justify-center mb-4">
-                    <FolderIcon className="h-8 w-8 text-purple-500" />
+                <div className="text-center py-8 sm:py-12">
+                  <div className="mx-auto h-12 sm:h-16 w-12 sm:w-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-3 sm:mb-4">
+                    <FolderIcon className="h-6 sm:h-8 w-6 sm:w-8 text-purple-500" />
                   </div>
-                  <p className="text-sm text-gray-500 mb-3">No files yet</p>
+                  <p className="text-sm text-gray-500 mb-2 sm:mb-3">No files yet</p>
                   <button type="button" aria-label="Upload first file" onClick={() => fileInputRef.current?.click()} className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
                     Upload your first file
                   </button>

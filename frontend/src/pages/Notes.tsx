@@ -247,24 +247,24 @@ const Notes: React.FC = () => {
   return (
     <MainLayout>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
-        <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8 space-y-6 sm:space-y-8">
           <div className={`transition-all duration-700 ease-out ${panelOpen ? 'lg:grid lg:grid-cols-[1fr_800px] gap-12' : 'lg:grid-cols-[1fr_0px]'}`}>
             {/* LEFT: Notes List */}
-            <div className="space-y-10 min-w-0">
+            <div className="space-y-6 sm:space-y-10 min-w-0">
               <div className="relative">
                 <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-2xl"></div>
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-3">
-                    <SparklesIcon className="w-8 h-8 text-blue-600" />
-                    <h1 className={`font-bold text-slate-900 font-serif transition-all duration-300 ${panelOpen ? 'text-2xl' : 'text-4xl'}`}>Notes</h1>
+                    <SparklesIcon className="w-6 sm:w-8 h-6 sm:h-8 text-blue-600" />
+                    <h1 className={`font-bold text-slate-900 font-serif transition-all duration-300 ${panelOpen ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>Notes</h1>
                   </div>
-                  <p className={`text-slate-600 leading-relaxed transition-all duration-300 ${panelOpen ? 'text-base' : 'text-lg'}`}>Capture and organize your thoughts in your personal knowledge vault</p>
+                  <p className={`text-slate-600 leading-relaxed transition-all duration-300 ${panelOpen ? 'text-sm sm:text-base' : 'text-base sm:text-lg'}`}>Capture and organize your thoughts in your personal knowledge vault</p>
                 </div>
               </div>
 
-              <div className={`relative transition-all duration-300 ${panelOpen ? 'max-w-md' : 'max-w-lg'}`}>
-                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                  <MagnifyingGlassIcon className="h-5 w-5 text-slate-400" />
+              <div className="relative transition-all duration-300 w-full max-w-lg">
+                <div className="absolute inset-y-0 left-0 pl-4 sm:pl-5 flex items-center pointer-events-none">
+                  <MagnifyingGlassIcon className="h-4 sm:h-5 w-4 sm:w-5 text-slate-400" />
                 </div>
                 <input
                   type="text"
@@ -272,22 +272,22 @@ const Notes: React.FC = () => {
                   aria-label="Search notes"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="block w-full pl-14 pr-6 py-4 bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-3xl
+                  className="block w-full pl-12 sm:pl-14 pr-4 sm:pr-6 py-3 sm:py-4 bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-2xl sm:rounded-3xl
                              focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
-                             transition-all duration-200 text-slate-900 placeholder:text-slate-400"
+                             transition-all duration-200 text-slate-900 placeholder:text-slate-400 text-sm sm:text-base"
                 />
               </div>
 
               {/* Notes Grid/List */}
               {isLoading ? (
-                <div className="flex items-center justify-center py-20">
+                <div className="flex items-center justify-center py-12 sm:py-20">
                   <div className="relative">
-                    <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-200"></div>
-                    <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-600 border-t-transparent absolute top-0"></div>
+                    <div className="animate-spin rounded-full h-10 sm:h-12 w-10 sm:w-12 border-2 border-blue-200"></div>
+                    <div className="animate-spin rounded-full h-10 sm:h-12 w-10 sm:w-12 border-2 border-blue-600 border-t-transparent absolute top-0"></div>
                   </div>
                 </div>
               ) : (
-                <div className={`transition-all duration-500 ${panelOpen ? 'space-y-3' : 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'}`}>
+                <div className={`transition-all duration-500 ${panelOpen ? 'space-y-3' : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-8'}`}>
                   <div
                     role="button"
                     tabIndex={0}
@@ -295,23 +295,27 @@ const Notes: React.FC = () => {
                     onClick={() => openEditor()}
                     onKeyDown={(e) => (e.key === 'Enter' ? openEditor() : null)}
                     className={`
-                      group relative bg-white/60 backdrop-blur-sm rounded-3xl border-2 border-dashed border-slate-300/60
+                      group relative bg-white/60 backdrop-blur-sm rounded-2xl sm:rounded-3xl border-2 border-dashed border-slate-300/60
                       flex items-center justify-center text-slate-500 transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] 
                       transform-gpu will-change-transform hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-300 hover:text-blue-600
                       hover:bg-gradient-to-br hover:from-blue-50/80 hover:to-indigo-50/80 cursor-pointer animate-fadeIn 
                       shadow-sm hover:shadow-xl hover:shadow-blue-500/10
-                      ${panelOpen ? 'h-16 px-6 flex-row gap-3 rounded-2xl' : 'min-h-[280px] p-8 flex-col'}
+                      ${panelOpen ? 'h-14 sm:h-16 px-4 sm:px-6 flex-row gap-3 rounded-2xl' : 'min-h-[200px] sm:min-h-[280px] p-4 sm:p-8 flex-col'}
                     `}
                     style={{ animationDelay: `0ms` }}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div className={`relative z-10 flex items-center ${panelOpen ? 'gap-3' : 'flex-col'}`}>
-                      <div className={`rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ${panelOpen ? 'w-10 h-10' : 'w-16 h-16 mb-4'}`}>
-                        <PlusIcon className={`text-blue-600 ${panelOpen ? 'h-5 w-5' : 'h-8 w-8'}`} />
+                      <div
+                        className={`rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ${
+                          panelOpen ? 'w-8 sm:w-10 h-8 sm:h-10' : 'w-12 sm:w-16 h-12 sm:h-16 mb-3 sm:mb-4'
+                        }`}
+                      >
+                        <PlusIcon className={`text-blue-600 ${panelOpen ? 'h-4 sm:h-5 w-4 sm:w-5' : 'h-6 sm:h-8 w-6 sm:w-8'}`} />
                       </div>
                       <div className={panelOpen ? 'text-left' : 'text-center'}>
-                        <span className={`font-semibold text-slate-700 ${panelOpen ? 'text-sm' : 'text-lg'}`}>Create New Note</span>
-                        {!panelOpen && <span className="text-sm text-slate-400 mt-1 block">Start capturing your ideas</span>}
+                        <span className={`font-semibold text-slate-700 ${panelOpen ? 'text-xs sm:text-sm' : 'text-base sm:text-lg'}`}>Create New Note</span>
+                        {!panelOpen && <span className="text-xs sm:text-sm text-slate-400 mt-1 block">Start capturing your ideas</span>}
                       </div>
                     </div>
                   </div>
@@ -340,27 +344,31 @@ const Notes: React.FC = () => {
                         ${dragOverNote === note.id ? 'ring-2 ring-blue-400 bg-blue-50/50 border-blue-300' : ''}
                         ${pinnedNotes.has(note.id) ? 'ring-2 ring-amber-200 bg-gradient-to-br from-amber-50/50 to-yellow-50/50' : ''}
                         ${selectedNoteId === note.id && panelOpen ? 'ring-2 ring-blue-300 bg-blue-50/30 border-blue-300' : ''}
-                        ${panelOpen ? 'p-6 flex items-start gap-5 min-h-[120px] rounded-2xl hover:translate-y-0 hover:scale-100' : 'p-8 min-h-[280px] rounded-3xl'}
+                        ${panelOpen ? 'p-4 sm:p-6 flex items-start gap-3 sm:gap-5 min-h-[100px] sm:min-h-[120px] rounded-2xl hover:translate-y-0 hover:scale-100' : 'p-4 sm:p-8 min-h-[200px] sm:min-h-[280px] rounded-2xl sm:rounded-3xl'}
                       `}
                       style={{ animationDelay: `${(idx + 1) * 80}ms` }}
                     >
                       {panelOpen && (
-                        <div className="flex-shrink-0 mt-1 p-3 text-slate-400 hover:text-slate-600 cursor-grab active:cursor-grabbing rounded-xl hover:bg-slate-100/80 transition-all duration-200 hover:scale-110 group-hover:bg-slate-50">
-                          <Bars3Icon className="w-5 h-5" />
+                        <div className="flex-shrink-0 mt-1 p-2 sm:p-3 text-slate-400 hover:text-slate-600 cursor-grab active:cursor-grabbing rounded-lg sm:rounded-xl hover:bg-slate-100/80 transition-all duration-200 hover:scale-110 group-hover:bg-slate-50">
+                          <Bars3Icon className="w-4 sm:w-5 h-4 sm:h-5" />
                         </div>
                       )}
 
-                      <div className={`absolute flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 ${panelOpen ? 'top-4 right-4' : 'top-6 right-6'}`}>
+                      <div
+                        className={`absolute flex space-x-1.5 sm:space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 ${
+                          panelOpen ? 'top-3 sm:top-4 right-3 sm:right-4' : 'top-4 sm:top-6 right-4 sm:right-6'
+                        }`}
+                      >
                         <button
                           type="button"
                           title={pinnedNotes.has(note.id) ? 'Unpin note' : 'Pin note'}
                           aria-label={pinnedNotes.has(note.id) ? 'Unpin note' : 'Pin note'}
                           onClick={(e) => togglePin(note.id, e)}
-                          className={`rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/90 shadow-sm hover:scale-110 border border-white/50 ${
+                          className={`rounded-lg sm:rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/90 shadow-sm hover:scale-110 border border-white/50 ${
                             pinnedNotes.has(note.id) ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50 hover:border-amber-200' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50 hover:border-amber-200'
-                          } ${panelOpen ? 'p-2' : 'p-2'}`}
+                          } ${panelOpen ? 'p-1.5 sm:p-2' : 'p-1.5 sm:p-2'}`}
                         >
-                          {pinnedNotes.has(note.id) ? <MapPinSolidIcon className={panelOpen ? 'h-4 w-4' : 'h-4 w-4'} /> : <MapPinIcon className={panelOpen ? 'h-4 w-4' : 'h-4 w-4'} />}
+                          {pinnedNotes.has(note.id) ? <MapPinSolidIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" /> : <MapPinIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />}
                         </button>
                         <button
                           type="button"
@@ -370,11 +378,11 @@ const Notes: React.FC = () => {
                             e.stopPropagation();
                             openEditor(note);
                           }}
-                          className={`text-slate-400 hover:text-blue-600 hover:bg-blue-50 hover:border-blue-200 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/90 shadow-sm hover:scale-110 border border-white/50 ${
-                            panelOpen ? 'p-2' : 'p-2'
+                          className={`text-slate-400 hover:text-blue-600 hover:bg-blue-50 hover:border-blue-200 rounded-lg sm:rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/90 shadow-sm hover:scale-110 border border-white/50 ${
+                            panelOpen ? 'p-1.5 sm:p-2' : 'p-1.5 sm:p-2'
                           }`}
                         >
-                          <PencilIcon className={panelOpen ? 'h-4 w-4' : 'h-4 w-4'} />
+                          <PencilIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                         </button>
                         <button
                           type="button"
@@ -384,39 +392,48 @@ const Notes: React.FC = () => {
                             e.stopPropagation();
                             handleDelete(note.id);
                           }}
-                          className={`text-slate-400 hover:text-red-600 hover:bg-red-50 hover:border-red-200 rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/90 shadow-sm hover:scale-110 border border-white/50 ${
-                            panelOpen ? 'p-2' : 'p-2'
+                          className={`text-slate-400 hover:text-red-600 hover:bg-red-50 hover:border-red-200 rounded-lg sm:rounded-xl transition-all duration-200 backdrop-blur-sm bg-white/90 shadow-sm hover:scale-110 border border-white/50 ${
+                            panelOpen ? 'p-1.5 sm:p-2' : 'p-1.5 sm:p-2'
                           }`}
                         >
-                          <TrashIcon className={panelOpen ? 'h-4 w-4' : 'h-4 w-4'} />
+                          <TrashIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                         </button>
                       </div>
 
-                      <div className={`flex h-full ${panelOpen ? 'flex-col flex-1 min-w-0 space-y-3' : 'flex-col'}`}>
+                      <div className={`flex h-full ${panelOpen ? 'flex-col flex-1 min-w-0 space-y-2 sm:space-y-3' : 'flex-col'}`}>
                         {panelOpen && pinnedNotes.has(note.id) && (
                           <div className="flex items-center gap-2 text-amber-600">
-                            <MapPinSolidIcon className="w-4 h-4" />
+                            <MapPinSolidIcon className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                             <span className="text-xs font-medium">Pinned</span>
                           </div>
                         )}
 
-                        <div className={panelOpen ? 'flex-1 space-y-2' : 'flex-1'}>
-                          <h3 className={`font-bold text-slate-900 leading-tight font-serif ${panelOpen ? 'text-lg mb-0 pr-16 line-clamp-2' : 'text-xl mb-4 pr-20 line-clamp-2'}`}>{note.title}</h3>
+                        <div className={panelOpen ? 'flex-1 space-y-1.5 sm:space-y-2' : 'flex-1'}>
+                          <h3 className={`font-bold text-slate-900 leading-tight font-serif ${panelOpen ? 'text-base sm:text-lg mb-0 pr-12 sm:pr-16 line-clamp-2' : 'text-lg sm:text-xl mb-3 sm:mb-4 pr-16 sm:pr-20 line-clamp-2'}`}>
+                            {note.title}
+                          </h3>
 
-                          <p className={`text-slate-600 leading-relaxed ${panelOpen ? 'text-sm line-clamp-2 mb-0' : 'text-base mb-6 line-clamp-4 flex-1'}`}>
-                            {note.content.substring(0, panelOpen ? 120 : 180)}
-                            {note.content.length > (panelOpen ? 120 : 180) && '...'}
+                          <p className={`text-slate-600 leading-relaxed ${panelOpen ? 'text-xs sm:text-sm line-clamp-2 mb-0' : 'text-sm sm:text-base mb-4 sm:mb-6 line-clamp-3 sm:line-clamp-4 flex-1'}`}>
+                            {note.content.substring(0, panelOpen ? 100 : 150)}
+                            {note.content.length > (panelOpen ? 100 : 150) && '...'}
                           </p>
 
                           {note.tags?.length > 0 && (
-                            <div className={`flex flex-wrap gap-1.5 ${panelOpen ? 'mb-0' : 'mb-6'}`}>
+                            <div className={`flex flex-wrap gap-1 sm:gap-1.5 ${panelOpen ? 'mb-0' : 'mb-4 sm:mb-6'}`}>
                               {note.tags.slice(0, panelOpen ? 2 : 3).map((tag, index) => (
-                                <span key={index} className={`inline-flex items-center rounded-xl font-medium border ${getTagColor(index)} ${panelOpen ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-xs'}`}>
+                                <span
+                                  key={index}
+                                  className={`inline-flex items-center rounded-lg sm:rounded-xl font-medium border ${getTagColor(index)} ${panelOpen ? 'px-2 sm:px-2.5 py-0.5 sm:py-1 text-xs' : 'px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs'}`}
+                                >
                                   {tag}
                                 </span>
                               ))}
                               {note.tags.length > (panelOpen ? 2 : 3) && (
-                                <span className={`inline-flex items-center rounded-xl font-medium bg-slate-100 text-slate-600 border border-slate-200 ${panelOpen ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-xs'}`}>
+                                <span
+                                  className={`inline-flex items-center rounded-lg sm:rounded-xl font-medium bg-slate-100 text-slate-600 border border-slate-200 ${
+                                    panelOpen ? 'px-2 sm:px-2.5 py-0.5 sm:py-1 text-xs' : 'px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs'
+                                  }`}
+                                >
                                   +{note.tags.length - (panelOpen ? 2 : 3)}
                                 </span>
                               )}
@@ -424,9 +441,9 @@ const Notes: React.FC = () => {
                           )}
                         </div>
 
-                        <div className={`flex items-center justify-between ${panelOpen ? 'pt-2 border-t border-slate-100/80' : 'pt-4 border-t border-slate-100'}`}>
-                          <div className={`text-slate-500 flex items-center gap-2 ${panelOpen ? 'text-xs' : 'text-sm'}`}>
-                            <BookmarkIcon className={panelOpen ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
+                        <div className={`flex items-center justify-between ${panelOpen ? 'pt-1.5 sm:pt-2 border-t border-slate-100/80' : 'pt-3 sm:pt-4 border-t border-slate-100'}`}>
+                          <div className={`text-slate-500 flex items-center gap-1.5 sm:gap-2 ${panelOpen ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+                            <BookmarkIcon className={panelOpen ? 'w-3 sm:w-3.5 h-3 sm:h-3.5' : 'w-3.5 sm:w-4 h-3.5 sm:h-4'} />
                             <span className="font-medium">
                               {new Date(note.created_at).toLocaleDateString('en-US', {
                                 year: 'numeric',
@@ -435,7 +452,7 @@ const Notes: React.FC = () => {
                               })}
                             </span>
                           </div>
-                          {!panelOpen && <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>}
+                          {!panelOpen && <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>}
                         </div>
                       </div>
                     </div>
@@ -445,74 +462,75 @@ const Notes: React.FC = () => {
 
               <aside
                 className={`
-                  fixed top-0 right-0 z-40 w-[800px] h-screen
+                  fixed top-0 right-0 z-40 h-screen
                   bg-white/95 backdrop-blur-xl border-l border-slate-200/60 shadow-2xl shadow-slate-900/10
                   transition-all duration-700 ease-[cubic-bezier(.16,1,.3,1)] transform-gpu will-change-transform
                   ${panelOpen ? 'translate-x-0' : 'translate-x-full'}
                   overflow-y-auto custom-scrollbar
+                  w-full sm:w-[600px] lg:w-[800px]
                 `}
               >
                 {isEditorOpen && (
-                  <div className="p-8 animate-slideIn">
-                    <div className="flex items-center justify-between mb-8">
+                  <div className="p-4 sm:p-8 animate-slideIn">
+                    <div className="flex items-center justify-between mb-6 sm:mb-8">
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-serif">{editingNote ? 'Edit Note' : 'Create New Note'}</h3>
-                        <p className="text-slate-500 mt-1">{editingNote ? 'Update your thoughts' : 'Capture your ideas'}</p>
+                        <h3 className="text-xl sm:text-2xl font-bold text-slate-900 font-serif">{editingNote ? 'Edit Note' : 'Create New Note'}</h3>
+                        <p className="text-slate-500 mt-1 text-sm sm:text-base">{editingNote ? 'Update your thoughts' : 'Capture your ideas'}</p>
                       </div>
-                      <button type="button" onClick={closePanel} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Close editor" aria-label="Close editor">
-                        <XMarkIcon className="w-6 h-6 text-slate-400" />
+                      <button type="button" onClick={closePanel} className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl hover:bg-slate-100 transition-colors" title="Close editor" aria-label="Close editor">
+                        <XMarkIcon className="w-5 sm:w-6 h-5 sm:h-6 text-slate-400" />
                       </button>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 sm:space-y-8">
                       <div>
-                        <label htmlFor="title" className="block text-sm font-semibold text-slate-700 mb-3">
+                        <label htmlFor="title" className="block text-sm font-semibold text-slate-700 mb-2 sm:mb-3">
                           Title
                         </label>
                         <input
                           id="title"
                           placeholder="Enter a compelling title..."
                           {...register('title', { required: 'Title is required' })}
-                          className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
+                          className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-slate-50/80 border border-slate-200 rounded-xl sm:rounded-2xl 
                                      focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
-                                     transition-all duration-200 text-slate-900 placeholder:text-slate-400"
+                                     transition-all duration-200 text-slate-900 placeholder:text-slate-400 text-sm sm:text-base"
                         />
                         {errors.title && <p className="mt-2 text-sm text-red-600 flex items-center gap-1">{errors.title.message}</p>}
                       </div>
 
                       <div>
-                        <label htmlFor="content" className="block text-sm font-semibold text-slate-700 mb-3">
+                        <label htmlFor="content" className="block text-sm font-semibold text-slate-700 mb-2 sm:mb-3">
                           Content
                         </label>
-                        <div className="rounded-2xl overflow-hidden border border-slate-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 transition-all duration-200">
+                        <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-slate-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 transition-all duration-200">
                           <JoditEditor value={editorContent} config={editorConfig} onBlur={(newContent) => setEditorContent(newContent)} onChange={(newContent) => setEditorContent(newContent)} />
                         </div>
                         {errors.content && <p className="mt-2 text-sm text-red-600">{errors.content.message}</p>}
                       </div>
 
                       <div>
-                        <label htmlFor="tags" className="block text-sm font-semibold text-slate-700 mb-3">
+                        <label htmlFor="tags" className="block text-sm font-semibold text-slate-700 mb-2 sm:mb-3">
                           Tags
                         </label>
                         <input
                           id="tags"
                           placeholder="Add tags separated by commas..."
                           {...register('tags')}
-                          className="w-full px-5 py-4 bg-slate-50/80 border border-slate-200 rounded-2xl 
+                          className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-slate-50/80 border border-slate-200 rounded-xl sm:rounded-2xl 
                                      focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white
-                                     transition-all duration-200 text-slate-900 placeholder:text-slate-400"
+                                     transition-all duration-200 text-slate-900 placeholder:text-slate-400 text-sm sm:text-base"
                         />
                       </div>
 
-                      <div className="flex justify-end gap-4 pt-6 border-t border-slate-100">
-                        <button type="button" onClick={closePanel} className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-medium transition-colors">
+                      <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-slate-100">
+                        <button type="button" onClick={closePanel} className="px-4 sm:px-6 py-2.5 sm:py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl sm:rounded-2xl font-medium transition-colors text-sm sm:text-base">
                           Cancel
                         </button>
                         <button
                           type="submit"
-                          className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 
-                                     text-white rounded-2xl font-medium shadow-lg shadow-blue-500/25 transition-all duration-200 
-                                     hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5"
+                          className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 
+                                     text-white rounded-xl sm:rounded-2xl font-medium shadow-lg shadow-blue-500/25 transition-all duration-200 
+                                     hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 text-sm sm:text-base"
                         >
                           {editingNote ? 'Update Note' : 'Create Note'}
                         </button>
@@ -522,26 +540,26 @@ const Notes: React.FC = () => {
                 )}
 
                 {isPreviewOpen && selectedNote && (
-                  <div className="p-8 animate-slideIn">
-                    <div className="flex items-center justify-between mb-8">
-                      <div className="flex gap-3">
-                        <button type="button" onClick={goPrev} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Previous note" aria-label="Previous note">
-                          <ChevronLeftIcon className="w-5 h-5 text-slate-600" />
+                  <div className="p-4 sm:p-8 animate-slideIn">
+                    <div className="flex items-center justify-between mb-6 sm:mb-8">
+                      <div className="flex gap-2 sm:gap-3">
+                        <button type="button" onClick={goPrev} className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl hover:bg-slate-100 transition-colors" title="Previous note" aria-label="Previous note">
+                          <ChevronLeftIcon className="w-4 sm:w-5 h-4 sm:h-5 text-slate-600" />
                         </button>
-                        <button type="button" onClick={goNext} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Next note" aria-label="Next note">
-                          <ChevronRightIcon className="w-5 h-5 text-slate-600" />
+                        <button type="button" onClick={goNext} className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl hover:bg-slate-100 transition-colors" title="Next note" aria-label="Next note">
+                          <ChevronRightIcon className="w-4 sm:w-5 h-4 sm:h-5 text-slate-600" />
                         </button>
                       </div>
-                      <button type="button" onClick={closePanel} className="p-2.5 rounded-2xl hover:bg-slate-100 transition-colors" title="Close preview" aria-label="Close preview">
-                        <XMarkIcon className="w-6 h-6 text-slate-400" />
+                      <button type="button" onClick={closePanel} className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl hover:bg-slate-100 transition-colors" title="Close preview" aria-label="Close preview">
+                        <XMarkIcon className="w-5 sm:w-6 h-5 sm:h-6 text-slate-400" />
                       </button>
                     </div>
 
-                    <div className="space-y-8">
+                    <div className="space-y-6 sm:space-y-8">
                       <div>
-                        <h2 className="text-3xl font-bold text-slate-900 mb-4 leading-tight font-serif">{selectedNote.title}</h2>
-                        <div className="text-sm text-slate-500 flex items-center gap-2 mb-6">
-                          <BookmarkIcon className="w-4 h-4" />
+                        <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3 sm:mb-4 leading-tight font-serif">{selectedNote.title}</h2>
+                        <div className="text-sm text-slate-500 flex items-center gap-2 mb-4 sm:mb-6">
+                          <BookmarkIcon className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                           {new Date(selectedNote.created_at).toLocaleString('en-US', {
                             year: 'numeric',
                             month: 'short',
@@ -550,49 +568,49 @@ const Notes: React.FC = () => {
                             minute: '2-digit',
                           })}
                         </div>
-                        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8"></div>
+                        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-6 sm:mb-8"></div>
                       </div>
 
                       {selectedNote.tags?.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-8">
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-6 sm:mb-8">
                           {selectedNote.tags.map((tag, i) => (
-                            <span key={i} className={`inline-flex items-center px-4 py-2 rounded-2xl text-sm font-medium border ${getTagColor(i)}`}>
+                            <span key={i} className={`inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium border ${getTagColor(i)}`}>
                               {tag}
                             </span>
                           ))}
                         </div>
                       )}
 
-                      <article className="prose prose-slate max-w-none text-slate-700 leading-relaxed text-base mb-8" dangerouslySetInnerHTML={{ __html: selectedNote.content }} />
+                      <article className="prose prose-slate max-w-none text-slate-700 leading-relaxed text-sm sm:text-base mb-6 sm:mb-8" dangerouslySetInnerHTML={{ __html: selectedNote.content }} />
 
-                      <div className="flex gap-4 pt-8 border-t border-slate-100">
+                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6 sm:pt-8 border-t border-slate-100">
                         <button
                           type="button"
                           onClick={() => openEditor(selectedNote)}
-                          className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 
+                          className="flex items-center justify-center sm:justify-start gap-3 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 
                                      text-blue-700 hover:from-blue-100 hover:to-indigo-100 border border-blue-200/50
                                      transition-all duration-200 font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5
-                                     hover:border-blue-300/50"
+                                     hover:border-blue-300/50 text-sm sm:text-base"
                           title="Edit note"
                           aria-label="Edit note"
                         >
-                          <div className="p-1.5 bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg shadow-sm">
-                            <PencilIcon className="w-4 h-4 text-white" />
+                          <div className="p-1 sm:p-1.5 bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg shadow-sm">
+                            <PencilIcon className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-white" />
                           </div>
                           Edit Note
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDelete(selectedNote.id)}
-                          className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-r from-red-50 to-rose-50 
+                          className="flex items-center justify-center sm:justify-start gap-3 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-red-50 to-rose-50 
                                      text-red-700 hover:from-red-100 hover:to-rose-100 border border-red-200/50
                                      transition-all duration-200 font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5
-                                     hover:border-red-300/50"
+                                     hover:border-red-300/50 text-sm sm:text-base"
                           title="Delete note"
                           aria-label="Delete note"
                         >
-                          <div className="p-1.5 bg-gradient-to-br from-red-400 to-red-500 rounded-lg shadow-sm">
-                            <TrashIcon className="w-4 h-4 text-white" />
+                          <div className="p-1 sm:p-1.5 bg-gradient-to-br from-red-400 to-red-500 rounded-lg shadow-sm">
+                            <TrashIcon className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-white" />
                           </div>
                           Delete
                         </button>
