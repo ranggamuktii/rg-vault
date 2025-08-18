@@ -161,40 +161,44 @@ const Dashboard: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6 sm:space-y-8 p-4 sm:p-8">
-        <div className="bg-gradient-to-r from-white to-blue-50/30 rounded-2xl sm:rounded-3xl p-6 sm:p-10 border border-gray-100/50 shadow-sm">
-          <h1 className="text-2xl sm:text-4xl font-light text-gray-900 mb-2 sm:mb-3">
+      <div className="space-y-6 sm:space-y-8 p-2 sm:p-4 lg:p-8 max-w-7xl mx-auto">
+        <div className="bg-gradient-to-r from-white to-blue-50/30 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-10 border border-gray-100/50 shadow-sm">
+          <h1 className="text-xl sm:text-3xl lg:text-4xl font-light text-gray-900 mb-1.5 sm:mb-2.5">
             {getGreetingID()}, {firstName} 👋
           </h1>
-          <p className="text-base sm:text-lg text-gray-600">Here's what's happening with your personal vault today</p>
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600">Here's what's happening with your personal vault today</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
           {statCards.map((card) => {
             const IconComponent = card.icon;
             return (
-              <Link key={card.title} to={card.link} className={`bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border ${card.borderColor} hover:border-gray-200 hover:shadow-lg transition-all duration-300 group`}>
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${card.iconBg} group-hover:scale-110 transition-transform duration-300`}>
-                    <IconComponent className={`h-6 sm:h-7 w-6 sm:w-7 ${card.iconColor}`} />
+              <Link
+                key={card.title}
+                to={card.link}
+                className={`bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 border ${card.borderColor} hover:border-gray-200 hover:shadow-lg transition-all duration-300 group`}
+              >
+                <div className="flex items-center justify-between mb-3 sm:mb-4 lg:mb-6">
+                  <div className={`p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl lg:rounded-2xl ${card.iconBg} group-hover:scale-110 transition-transform duration-300`}>
+                    <IconComponent className={`h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 ${card.iconColor}`} />
                   </div>
-                  <ArrowRightIcon className="h-4 sm:h-5 w-4 sm:w-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all duration-300" />
+                  <ArrowRightIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all duration-300" />
                 </div>
                 <div>
-                  <p className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">{card.value}</p>
-                  <p className="text-sm sm:text-base text-gray-600 font-medium">{card.title}</p>
+                  <p className="text-lg sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1">{card.value}</p>
+                  <p className="text-xs sm:text-sm lg:text-base text-gray-600 font-medium">{card.title}</p>
                 </div>
               </Link>
             );
           })}
         </div>
 
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100/50 overflow-hidden shadow-sm">
-          <div className="p-6 sm:p-8 border-b border-gray-100/50 bg-gradient-to-r from-gray-50/30 to-white">
+        <div className="bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl border border-gray-100/50 overflow-hidden shadow-sm">
+          <div className="p-4 sm:p-6 lg:p-8 border-b border-gray-100/50 bg-gradient-to-r from-gray-50/30 to-white">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Productivity Hub</h3>
-                <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">Quick actions to boost your workflow</p>
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900">Productivity Hub</h3>
+                <p className="text-xs sm:text-sm lg:text-base text-gray-600 mt-1">Quick actions to boost your workflow</p>
               </div>
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <div className="h-2.5 sm:h-3 w-2.5 sm:w-3 bg-green-500 rounded-full animate-pulse" />
@@ -203,21 +207,21 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-6 sm:p-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="p-4 sm:p-6 lg:p-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
               <button
                 type="button"
                 aria-label="Create note"
                 onClick={() => setShowNoteModal(true)}
-                className="group relative bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 border border-blue-200/50 hover:border-blue-300 hover:shadow-lg"
+                className="group relative bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 transition-all duration-300 border border-blue-200/50 hover:border-blue-300 hover:shadow-lg"
               >
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <div className="p-3 sm:p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl sm:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <DocumentTextIcon className="h-6 sm:h-7 w-6 sm:w-7 text-white" />
+                <div className="flex items-center justify-between mb-3 sm:mb-4 lg:mb-6">
+                  <div className="p-2 sm:p-3 lg:p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg sm:rounded-xl lg:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <DocumentTextIcon className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />
                   </div>
-                  <div className="text-xs bg-blue-200/80 text-blue-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-semibold">Ctrl+N</div>
+                  <div className="text-[10px] sm:text-xs bg-blue-200/80 text-blue-800 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full font-semibold">Ctrl+N</div>
                 </div>
-                <h4 className="font-bold text-gray-900 mb-2 sm:mb-3 text-base sm:text-lg">Create Note</h4>
+                <h4 className="font-bold text-gray-900 mb-1.5 sm:mb-2.5 text-sm sm:text-lg">Create Note</h4>
                 <p className="text-xs sm:text-sm text-gray-600">Write and organize your thoughts</p>
               </button>
 
@@ -225,15 +229,15 @@ const Dashboard: React.FC = () => {
                 type="button"
                 aria-label="Save link"
                 onClick={() => setShowLinkModal(true)}
-                className="group relative bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 border border-green-200/50 hover:border-green-300 hover:shadow-lg"
+                className="group relative bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 transition-all duration-300 border border-green-200/50 hover:border-green-300 hover:shadow-lg"
               >
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <div className="p-3 sm:p-4 bg-gradient-to-br from-green-500 to-green-600 rounded-xl sm:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <LinkIcon className="h-6 sm:h-7 w-6 sm:w-7 text-white" />
+                <div className="flex items-center justify-between mb-3 sm:mb-4 lg:mb-6">
+                  <div className="p-2 sm:p-3 lg:p-4 bg-gradient-to-br from-green-500 to-green-600 rounded-lg sm:rounded-xl lg:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <LinkIcon className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />
                   </div>
-                  <div className="text-xs bg-green-200/80 text-green-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-semibold">Ctrl+L</div>
+                  <div className="text-[10px] sm:text-xs bg-green-200/80 text-green-800 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full font-semibold">Ctrl+L</div>
                 </div>
-                <h4 className="font-bold text-gray-900 mb-2 sm:mb-3 text-base sm:text-lg">Save Link</h4>
+                <h4 className="font-bold text-gray-900 mb-1.5 sm:mb-2.5 text-sm sm:text-lg">Save Link</h4>
                 <p className="text-xs sm:text-sm text-gray-600">Bookmark important resources</p>
               </button>
 
@@ -241,36 +245,36 @@ const Dashboard: React.FC = () => {
                 type="button"
                 aria-label="Upload file"
                 onClick={() => fileInputRef.current?.click()}
-                className="group relative bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 border border-purple-200/50 hover:border-purple-300 hover:shadow-lg"
+                className="group relative bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 transition-all duration-300 border border-purple-200/50 hover:border-purple-300 hover:shadow-lg"
               >
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl sm:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <FolderIcon className="h-6 sm:h-7 w-6 sm:w-7 text-white" />
+                <div className="flex items-center justify-between mb-3 sm:mb-4 lg:mb-6">
+                  <div className="p-2 sm:p-3 lg:p-4 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg sm:rounded-xl lg:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <FolderIcon className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />
                   </div>
-                  <div className="text-xs bg-purple-200/80 text-purple-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-semibold">Ctrl+U</div>
+                  <div className="text-[10px] sm:text-xs bg-purple-200/80 text-purple-800 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full font-semibold">Ctrl+U</div>
                 </div>
-                <h4 className="font-bold text-gray-900 mb-2 sm:mb-3 text-base sm:text-lg">Upload File</h4>
+                <h4 className="font-bold text-gray-900 mb-1.5 sm:mb-2.5 text-sm sm:text-lg">Upload File</h4>
                 <p className="text-xs sm:text-sm text-gray-600">Store documents and media</p>
               </button>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Recent Notes */}
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-100/50 shadow-sm">
-            <div className="flex items-center justify-between mb-6 sm:mb-8">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Recent Notes</h3>
-              <Link to="/notes" className="text-sm text-blue-600 hover:text-blue-700 flex items-center font-semibold group">
+          <div className="bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 border border-gray-100/50 shadow-sm">
+            <div className="flex items-center justify-between mb-5 sm:mb-6 lg:mb-8">
+              <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">Recent Notes</h3>
+              <Link to="/notes" className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 flex items-center font-semibold group">
                 View all
                 <ArrowRightIcon className="h-3 sm:h-4 w-3 sm:w-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-2.5 sm:space-y-3.5 lg:space-y-4">
               {stats?.recentNotes?.length ? (
                 stats.recentNotes.slice(0, 4).map((note) => (
-                  <div key={note.id} className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl hover:bg-blue-50/50 transition-colors duration-200">
-                    <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl sm:rounded-2xl">
+                  <div key={note.id} className="flex items-start space-x-3 sm:space-x-4 p-2.5 sm:p-3.5 lg:p-4 rounded-lg sm:rounded-xl lg:rounded-2xl hover:bg-blue-50/50 transition-colors duration-200">
+                    <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg sm:rounded-xl">
                       <DocumentTextIcon className="h-4 sm:h-5 w-4 sm:w-5 text-blue-600" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -294,19 +298,19 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Recent Links */}
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-100/50 shadow-sm">
-            <div className="flex items-center justify-between mb-6 sm:mb-8">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Recent Links</h3>
-              <Link to="/links" className="text-sm text-blue-600 hover:text-blue-700 flex items-center font-semibold group">
+          <div className="bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 border border-gray-100/50 shadow-sm">
+            <div className="flex items-center justify-between mb-5 sm:mb-6 lg:mb-8">
+              <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">Recent Links</h3>
+              <Link to="/links" className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 flex items-center font-semibold group">
                 View all
                 <ArrowRightIcon className="h-3 sm:h-4 w-3 sm:w-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-2.5 sm:space-y-3.5 lg:space-y-4">
               {stats?.recentLinks?.length ? (
                 stats.recentLinks.slice(0, 4).map((link) => (
-                  <div key={link.id} className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl hover:bg-green-50/50 transition-colors duration-200">
-                    <div className="p-2 sm:p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-xl sm:rounded-2xl">
+                  <div key={link.id} className="flex items-start space-x-3 sm:space-x-4 p-2.5 sm:p-3.5 lg:p-4 rounded-lg sm:rounded-xl lg:rounded-2xl hover:bg-green-50/50 transition-colors duration-200">
+                    <div className="p-2 sm:p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg sm:rounded-xl">
                       <LinkIcon className="h-4 sm:h-5 w-4 sm:w-5 text-green-600" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -330,19 +334,19 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Recent Files */}
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-100/50 shadow-sm">
-            <div className="flex items-center justify-between mb-6 sm:mb-8">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Recent Files</h3>
-              <Link to="/files" className="text-sm text-blue-600 hover:text-blue-700 flex items-center font-semibold group">
+          <div className="bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 border border-gray-100/50 shadow-sm">
+            <div className="flex items-center justify-between mb-5 sm:mb-6 lg:mb-8">
+              <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">Recent Files</h3>
+              <Link to="/files" className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 flex items-center font-semibold group">
                 View all
                 <ArrowRightIcon className="h-3 sm:h-4 w-3 sm:w-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-2.5 sm:space-y-3.5 lg:space-y-4">
               {stats?.recentFiles?.length ? (
                 stats.recentFiles.slice(0, 4).map((file) => (
-                  <div key={file.id} className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl hover:bg-purple-50/50 transition-colors duration-200">
-                    <div className="p-2 sm:p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl sm:rounded-2xl">
+                  <div key={file.id} className="flex items-start space-x-3 sm:space-x-4 p-2.5 sm:p-3.5 lg:p-4 rounded-lg sm:rounded-xl lg:rounded-2xl hover:bg-purple-50/50 transition-colors duration-200">
+                    <div className="p-2 sm:p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg sm:rounded-xl">
                       <FolderIcon className="h-4 sm:h-5 w-4 sm:w-5 text-purple-600" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -370,17 +374,17 @@ const Dashboard: React.FC = () => {
           <div className="fixed inset-0 z-50 overflow-y-auto">
             <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
               <div className="fixed inset-0 transition-opacity bg-black/20 backdrop-blur-sm" onClick={() => setShowNoteModal(false)} />
-              <div className="inline-block align-bottom bg-white rounded-3xl px-8 pt-8 pb-8 text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-100/50">
+              <div className="inline-block align-bottom bg-white rounded-2xl sm:rounded-3xl px-6 sm:px-8 pt-6 sm:pt-8 pb-6 sm:pb-8 text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-100/50">
                 <form onSubmit={noteForm.handleSubmit(handleCreateNote)}>
-                  <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-2xl font-semibold text-gray-900">Create New Note</h3>
-                    <button type="button" aria-label="Close note modal" title="Close note modal" onClick={() => setShowNoteModal(false)} className="p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-2xl transition-all">
+                  <div className="flex items-center justify-between mb-6 sm:mb-8">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Create New Note</h3>
+                    <button type="button" aria-label="Close note modal" title="Close note modal" onClick={() => setShowNoteModal(false)} className="p-2.5 sm:p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl sm:rounded-2xl transition-all">
                       <XMarkIcon className="h-6 w-6" />
                     </button>
                   </div>
-                  <div className="space-y-6">
+                  <div className="space-y-5 sm:space-y-6">
                     <div>
-                      <label htmlFor="note-title" className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label htmlFor="note-title" className="block text-sm font-semibold text-gray-700 mb-2.5 sm:mb-3">
                         Title
                       </label>
                       <input
@@ -388,12 +392,12 @@ const Dashboard: React.FC = () => {
                         {...noteForm.register('title', { required: 'Title is required' })}
                         type="text"
                         placeholder="Enter note title"
-                        className="w-full px-5 py-4 border border-gray-200/50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                        className="w-full px-4 sm:px-5 py-3.5 sm:py-4 border border-gray-200/50 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
                       />
                       {noteForm.formState.errors.title && <p className="mt-2 text-sm text-red-600">{noteForm.formState.errors.title.message}</p>}
                     </div>
                     <div>
-                      <label htmlFor="note-content" className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label htmlFor="note-content" className="block text-sm font-semibold text-gray-700 mb-2.5 sm:mb-3">
                         Content
                       </label>
                       <textarea
@@ -401,12 +405,12 @@ const Dashboard: React.FC = () => {
                         {...noteForm.register('content', { required: 'Content is required' })}
                         placeholder="Write your note here..."
                         rows={6}
-                        className="w-full px-5 py-4 border border-gray-200/50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 resize-none transition-all"
+                        className="w-full px-4 sm:px-5 py-3.5 sm:py-4 border border-gray-200/50 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 resize-none transition-all"
                       />
                       {noteForm.formState.errors.content && <p className="mt-2 text-sm text-red-600">{noteForm.formState.errors.content.message}</p>}
                     </div>
                     <div>
-                      <label htmlFor="note-tags" className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label htmlFor="note-tags" className="block text-sm font-semibold text-gray-700 mb-2.5 sm:mb-3">
                         Tags
                       </label>
                       <input
@@ -414,15 +418,15 @@ const Dashboard: React.FC = () => {
                         {...noteForm.register('tags')}
                         placeholder="work, personal, ideas"
                         type="text"
-                        className="w-full px-5 py-4 border border-gray-200/50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                        className="w-full px-4 sm:px-5 py-3.5 sm:py-4 border border-gray-200/50 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
                       />
                     </div>
                   </div>
-                  <div className="flex justify-end space-x-4 pt-8 mt-8 border-t border-gray-100/50">
-                    <button type="button" onClick={() => setShowNoteModal(false)} className="px-8 py-4 text-sm font-semibold text-gray-700 bg-gray-100 rounded-2xl hover:bg-gray-200 transition-all">
+                  <div className="flex justify-end space-x-3 sm:space-x-4 pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-gray-100/50">
+                    <button type="button" onClick={() => setShowNoteModal(false)} className="px-6 sm:px-8 py-3 sm:py-4 text-sm font-semibold text-gray-700 bg-gray-100 rounded-xl sm:rounded-2xl hover:bg-gray-200 transition-all">
                       Cancel
                     </button>
-                    <button type="submit" className="px-8 py-4 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg">
+                    <button type="submit" className="px-6 sm:px-8 py-3 sm:py-4 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl sm:rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg">
                       Create Note
                     </button>
                   </div>
@@ -436,17 +440,17 @@ const Dashboard: React.FC = () => {
           <div className="fixed inset-0 z-50 overflow-y-auto">
             <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
               <div className="fixed inset-0 transition-opacity bg-black/20 backdrop-blur-sm" onClick={() => setShowLinkModal(false)} />
-              <div className="inline-block align-bottom bg-white rounded-3xl px-8 pt-8 pb-8 text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-100/50">
+              <div className="inline-block align-bottom bg-white rounded-2xl sm:rounded-3xl px-6 sm:px-8 pt-6 sm:pt-8 pb-6 sm:pb-8 text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-100/50">
                 <form onSubmit={linkForm.handleSubmit(handleCreateLink)}>
-                  <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-2xl font-semibold text-gray-900">Save New Link</h3>
-                    <button type="button" aria-label="Close link modal" title="Close link modal" onClick={() => setShowLinkModal(false)} className="p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-2xl transition-all">
+                  <div className="flex items-center justify-between mb-6 sm:mb-8">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Save New Link</h3>
+                    <button type="button" aria-label="Close link modal" title="Close link modal" onClick={() => setShowLinkModal(false)} className="p-2.5 sm:p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl sm:rounded-2xl transition-all">
                       <XMarkIcon className="h-6 w-6" />
                     </button>
                   </div>
-                  <div className="space-y-6">
+                  <div className="space-y-5 sm:space-y-6">
                     <div>
-                      <label htmlFor="link-url" className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label htmlFor="link-url" className="block text-sm font-semibold text-gray-700 mb-2.5 sm:mb-3">
                         URL *
                       </label>
                       <input
@@ -460,12 +464,12 @@ const Dashboard: React.FC = () => {
                         })}
                         type="url"
                         placeholder="https://example.com"
-                        className="w-full px-5 py-4 border border-gray-200/50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                        className="w-full px-4 sm:px-5 py-3.5 sm:py-4 border border-gray-200/50 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
                       />
                       {linkForm.formState.errors.url && <p className="mt-2 text-sm text-red-600">{linkForm.formState.errors.url.message}</p>}
                     </div>
                     <div>
-                      <label htmlFor="link-title" className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label htmlFor="link-title" className="block text-sm font-semibold text-gray-700 mb-2.5 sm:mb-3">
                         Title
                       </label>
                       <input
@@ -473,11 +477,11 @@ const Dashboard: React.FC = () => {
                         {...linkForm.register('title')}
                         placeholder="Link title"
                         type="text"
-                        className="w-full px-5 py-4 border border-gray-200/50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                        className="w-full px-4 sm:px-5 py-3.5 sm:py-4 border border-gray-200/50 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
                       />
                     </div>
                     <div>
-                      <label htmlFor="link-description" className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label htmlFor="link-description" className="block text-sm font-semibold text-gray-700 mb-2.5 sm:mb-3">
                         Description
                       </label>
                       <textarea
@@ -485,11 +489,11 @@ const Dashboard: React.FC = () => {
                         {...linkForm.register('description')}
                         placeholder="Optional description"
                         rows={3}
-                        className="w-full px-5 py-4 border border-gray-200/50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 resize-none transition-all"
+                        className="w-full px-4 sm:px-5 py-3.5 sm:py-4 border border-gray-200/50 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 resize-none transition-all"
                       />
                     </div>
                     <div>
-                      <label htmlFor="link-category" className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label htmlFor="link-category" className="block text-sm font-semibold text-gray-700 mb-2.5 sm:mb-3">
                         Category
                       </label>
                       <input
@@ -497,15 +501,15 @@ const Dashboard: React.FC = () => {
                         {...linkForm.register('category')}
                         placeholder="work, personal, resources"
                         type="text"
-                        className="w-full px-5 py-4 border border-gray-200/50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                        className="w-full px-4 sm:px-5 py-3.5 sm:py-4 border border-gray-200/50 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
                       />
                     </div>
                   </div>
-                  <div className="flex justify-end space-x-4 pt-8 mt-8 border-t border-gray-100/50">
-                    <button type="button" onClick={() => setShowLinkModal(false)} className="px-8 py-4 text-sm font-semibold text-gray-700 bg-gray-100 rounded-2xl hover:bg-gray-200 transition-all">
+                  <div className="flex justify-end space-x-3 sm:space-x-4 pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-gray-100/50">
+                    <button type="button" onClick={() => setShowLinkModal(false)} className="px-6 sm:px-8 py-3 sm:py-4 text-sm font-semibold text-gray-700 bg-gray-100 rounded-xl sm:rounded-2xl hover:bg-gray-200 transition-all">
                       Cancel
                     </button>
-                    <button type="submit" className="px-8 py-4 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg">
+                    <button type="submit" className="px-6 sm:px-8 py-3 sm:py-4 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl sm:rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg">
                       Save Link
                     </button>
                   </div>
